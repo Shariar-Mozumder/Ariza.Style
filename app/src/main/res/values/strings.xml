@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Ariza.Style</string>
+
+    <string-array name="Catagory_names">
+        <item>Accessories</item>
+        <item>Beauty Care</item>
+        <item>Footwear</item>
+        <item>Salwar Kamiz</item>
+        <item>Sharee</item>
+        <item>Western Wear</item>
+        <item>Pant</item>
+        <item>Men Care</item>
+        <item>See More</item>
+
+    </string-array>
+
+
+
+</resources>
