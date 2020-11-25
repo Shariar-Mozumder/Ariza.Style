@@ -32,7 +32,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         {//inflates row layout.
             View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.row,viewGroup,false);
             return new DataViewHolder(view);
-            //hey
+            
         }
         else
         {//inflates progressbar layout.
