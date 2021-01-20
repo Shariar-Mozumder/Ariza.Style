@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Catagories.Catagory_Product_List">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/rl6">
+
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardElevation="10dp"
+            app:cardCornerRadius="10dp"
+            android:layout_margin="5dp"
+            android:id="@+id/title">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Brand"
+                android:id="@+id/catagory_name"
+                android:textAlignment="center"
+                android:maxLines="2"
+                android:textSize="20dp"
+                android:layout_margin="5dp"
+                android:padding="5dp"
+                android:textStyle="bold|italic"
+                android:textColor="@android:color/black"/>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/catagoryproductListID"
+            android:layout_below="@+id/title"/>
+    </RelativeLayout>
+
+
+
+</RelativeLayout>

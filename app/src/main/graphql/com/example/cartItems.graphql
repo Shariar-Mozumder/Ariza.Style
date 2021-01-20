@@ -1,0 +1,5 @@
+mutation AddToCartItems($input:CartItemInput!){
+    addItemToCart(input:$input){
+        items{product_id,name,quantity,price,cart_id,total},total
+    }
+}

@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CheckOut.CheckOut">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Your Personal Information"
+            android:textSize="25dp"
+            android:background="@drawable/input_design"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            android:padding="5dp"
+            android:layout_margin="10dp"
+            android:id="@+id/personalinfoTV"/>
+
+        <EditText
+            android:layout_below="@+id/personalinfoTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Full Name"
+            android:id="@+id/checkFullNameET"
+            android:layout_margin="10dp"
+            android:textSize="20dp"/>
+
+        <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Delivery Address"
+        android:id="@+id/checkDeliveryddressET"
+        android:layout_margin="10dp"
+        android:layout_below="@+id/checkFullNameET"
+        android:textSize="20dp"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Phone Number"
+            android:id="@+id/checkmobileNumberET"
+            android:layout_margin="10dp"
+            android:layout_below="@+id/checkDeliveryddressET"
+            android:textSize="20dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Payment Method"
+            android:textSize="25dp"
+            android:background="@drawable/input_design"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            android:padding="5dp"
+            android:layout_margin="10dp"
+            android:layout_below="@+id/checkmobileNumberET"
+            android:id="@+id/paymentMethod"/>
+
+        <RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/paymentMethod"
+            android:layout_margin="10dp"
+            android:weightSum="1"
+            android:id="@+id/radioGroup"
+            >
+
+            <RadioButton
+                android:id="@+id/cashOnDeliveryID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="#3CEB45"
+                android:checked="true"
+                android:text="Cash On Delivery"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+
+            <RadioButton
+                android:id="@+id/paymentGateWayID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="#3CEB45"
+                android:text="Visa,Master,Amex,Mobile Banking,Walletmix gateway"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+        </RadioGroup>
+
+
+
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Add any Comment"
+            android:textSize="25dp"
+            android:background="@drawable/input_design"
+
+            android:textStyle="bold"
+            android:textAlignment="center"
+            android:padding="5dp"
+            android:layout_margin="10dp"
+            android:layout_below="@+id/radioGroup"
+            android:id="@+id/confirmText"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Add Comments about Your Order"
+            android:id="@+id/commentsET"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="20dp"
+            android:layout_below="@+id/confirmText"
+            android:textSize="20dp"/>
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="I have read and agreed to the Terms and Conditions"
+            android:id="@+id/checkTerms"
+            android:layout_margin="10dp"
+            android:layout_below="@+id/commentsET"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Confirm Your Order --->"
+            android:id="@+id/confirmBTn"
+            android:textSize="20dp"
+            android:layout_margin="20dp"
+            android:layout_below="@+id/checkTerms"
+            android:background="@drawable/buttons"
+            android:padding="10dp"
+            android:layout_alignParentBottom="true"/>
+
+    </RelativeLayout>
+
+</ScrollView>

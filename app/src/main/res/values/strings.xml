@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Ariza.Style</string>
+    <string name="nav_open">Open</string>
+    <string name="nav_close">Close</string>
 
     <string-array name="Catagory_names">
         <item>Accessories</item>
@@ -14,6 +16,79 @@
 
     </string-array>
 
+
+    <string-array name="latest_names">
+        <item>Accessories</item>
+        <item>Beauty Care</item>
+        <item>Footwear</item>
+        <item>Salwar Kamiz</item>
+        <item>Sharee</item>
+        <item>Western Wear</item>
+        <item>Pant</item>
+        <item>Men Care</item>
+        <item>See More</item>
+        <item>Accessories</item>
+        <item>Beauty Care</item>
+        <item>Footwear</item>
+        <item>Salwar Kamiz</item>
+        <item>Sharee</item>
+        <item>Western Wear</item>
+        <item>Pant</item>
+        <item>Men Care</item>
+        <item>See More</item>
+        <item>Accessories</item>
+        <item>Beauty Care</item>
+        <item>Footwear</item>
+        <item>Salwar Kamiz</item>
+        <item>Sharee</item>
+        <item>Western Wear</item>
+        <item>Pant</item>
+        <item>Men Care</item>
+        <item>See More</item>
+        <item>Accessories</item>
+        <item>Beauty Care</item>
+        <item>Footwear</item>
+        <item>Salwar Kamiz</item>
+        <item>Sharee</item>
+        <item>Western Wear</item>
+        <item>Pant</item>
+        <item>Men Care</item>
+
+    </string-array>
+
+    <string-array name="size_array">
+        <item>M</item>
+        <item>L</item>
+        <item>XL</item>
+        <item>XXL</item>
+        <item>Super Large</item>
+        <item>Junior(8-12)</item>
+        <item>Junior(13-17)</item>
+    </string-array>
+
+    <string-array name="colour_array">
+        <item>White</item>
+        <item>Red</item>
+        <item>Gray</item>
+        <item>Blue</item>
+        <item>Green</item>
+        <item>Orange</item>
+        <item>Sky</item>
+    </string-array>
+    <string name="title_activity_navigation">Navigation</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_tools">Tools</string>
+    <string name="menu_share">Share</string>
+    <string name="menu_send">Send</string>
 
 
 </resources>

@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.amar.library.ui.StickyScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:stickyHeader="@id/titlecard"
+    android:background="#F0F2F5"
+    tools:context=".IndividualProductDetails.ProductDetailsActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardElevation="10dp"
+        app:cardCornerRadius="10dp"
+        android:layout_margin="5dp"
+        android:id="@+id/cdView1">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.smarteist.autoimageslider.SliderLayout
+                android:layout_width="match_parent"
+                android:layout_height="350dp"
+                android:layout_alignParentTop="true"
+                android:id="@+id/imageSlider2"/>
+
+
+
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardElevation="10dp"
+            app:cardCornerRadius="10dp"
+            android:layout_margin="5dp"
+            android:layout_below="@+id/cdView1"
+            android:id="@+id/titlecard">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Girls Western T-Shirt for casual use, Model-GWT001"
+                android:id="@+id/product_name"
+                android:textAlignment="center"
+                android:maxLines="2"
+                android:textSize="20dp"
+                android:layout_margin="5dp"
+                android:padding="5dp"
+                android:textStyle="bold"
+                android:textColor="@android:color/black"/>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardElevation="10dp"
+            app:cardCornerRadius="10dp"
+            android:layout_margin="5dp"
+            android:layout_below="@+id/titlecard"
+            android:id="@+id/cdView2">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/rl4">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Price:"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/black"
+                    android:padding="10dp"
+                    android:textSize="20dp"
+                    android:id="@+id/pricetext"
+                    android:layout_margin="5dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Description"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/black"
+                    android:padding="10dp"
+                    android:id="@+id/descriptiontext"
+                    android:layout_below="@+id/pricetext"
+                    android:layout_margin="5dp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/descriptiontext"
+                    android:id="@+id/descriptionDetails"
+                    android:padding="10dp"
+                    android:text="Dimensions: Length: 26cm Width: 26cm Depth: 2.5cm\r\nSize: 10 Inch\r\nShape: Round\r\nQuantity: 1 Pack (25 Pieces per Pack)\r\n100% Biodegradable and Compostable\r\n100% Natural and Organic\r\nDoes not contains any glue or chemicals\r\nMicrowave safe, liquid and heat s"
+                    android:layout_margin="10dp"/>
+
+
+
+
+
+<!--                <TextView-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="Size"-->
+<!--                    android:textSize="16dp"-->
+<!--                    android:layout_below="@+id/variationtext"-->
+<!--                    android:layout_margin="5dp"-->
+<!--                    android:padding="10dp"-->
+<!--                    android:id="@+id/sizetext"/>-->
+
+
+
+<!--                <androidx.recyclerview.widget.RecyclerView-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:id="@+id/size_recyclerView"-->
+<!--                    android:layout_below="@+id/sizetext"/>-->
+
+<!--                <TextView-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="Color"-->
+<!--                    android:textSize="16dp"-->
+<!--                    android:layout_below="@+id/size_recyclerView"-->
+<!--                    android:layout_margin="5dp"-->
+<!--                    android:padding="10dp"-->
+<!--                    android:id="@+id/colourtext"/>-->
+
+<!--                <androidx.recyclerview.widget.RecyclerView-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:id="@+id/color_recyclerView"-->
+<!--                    android:layout_below="@+id/colourtext"/>-->
+
+
+
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardElevation="10dp"
+            app:cardCornerRadius="10dp"
+            android:layout_margin="5dp"
+            android:layout_below="@+id/cdView2"
+            android:id="@+id/cdView3">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:id="@+id/rl5">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Specification"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/black"
+                    android:padding="10dp"
+                    android:id="@+id/specificationtext"
+                    android:layout_margin="5dp"/>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Stock Status:"
+                    android:textStyle="bold"
+                    android:padding="10dp"
+                    android:textSize="12dp"
+                    android:id="@+id/stocktext"
+                    android:layout_below="@+id/specificationtext"
+                    android:layout_margin="5dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Available Quantity:"
+                    android:textStyle="bold"
+                    android:padding="10dp"
+                    android:textSize="12dp"
+                    android:id="@+id/quantitytext"
+                    android:layout_below="@+id/stocktext"
+                    android:layout_margin="5dp"/>
+
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Weight:"
+                    android:textStyle="bold"
+                    android:padding="10dp"
+                    android:textSize="12dp"
+                    android:id="@+id/weighttext"
+                    android:layout_below="@+id/quantitytext"
+                    android:layout_margin="5dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Height:"
+                    android:textStyle="bold"
+                    android:padding="10dp"
+                    android:textSize="12dp"
+                    android:id="@+id/heighttext"
+                    android:layout_below="@+id/weighttext"
+                    android:layout_margin="5dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Length:"
+                    android:textStyle="bold"
+                    android:padding="10dp"
+                    android:textSize="12dp"
+                    android:id="@+id/lengthttext"
+                    android:layout_below="@+id/heighttext"
+                    android:layout_margin="5dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Width:"
+                    android:textStyle="bold"
+                    android:padding="10dp"
+                    android:textSize="12dp"
+                    android:id="@+id/widhttext"
+                    android:layout_below="@+id/lengthttext"
+                    android:layout_margin="5dp"/>
+
+
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
+
+
+
+
+
+
+
+
+
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cdView3"
+        android:layout_alignParentBottom="true"
+        android:background="#F0F2F5"
+        app:cardElevation="10dp"
+        app:cardCornerRadius="10dp"
+        android:id="@+id/footerBottom">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="2"
+            android:orientation="horizontal">
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Buy Now"
+                android:id="@+id/buynowID"
+                android:textColor="#ffff"
+                android:layout_weight="1"
+                android:layout_margin="5dp"
+                android:textStyle="bold"
+                android:textSize="15dp"
+                android:shadowRadius="5"
+                android:elevation="5dp"
+                android:padding="5dp"
+                android:background="@drawable/buttons"
+                android:textAlignment="center"/>
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Add to Cart"
+                android:id="@+id/addToCartID"
+                android:layout_margin="5dp"
+                android:textStyle="bold"
+                android:textSize="15dp"
+                android:layout_weight="1"
+                android:padding="5dp"
+                android:background="@drawable/input_design"
+                android:textAlignment="center"/>
+
+
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+    </RelativeLayout>
+</com.amar.library.ui.StickyScrollView>

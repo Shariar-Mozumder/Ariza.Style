@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="wrap_content"
-    android:background="@drawable/background"
-    android:layout_height="match_parent">
+    app:cardCornerRadius="10dp"
+    android:elevation="10dp"
+    android:layout_margin="3dp"
+    android:background="#A29E9E"
+    android:layout_height="wrap_content">
 
     <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="#858283"
+        android:layout_width="130dp"
+        android:layout_height="240dp"
+        android:background="@android:color/white"
         android:id="@+id/rl2">
 
         <ImageView
-            android:layout_width="100dp"
-            android:layout_height="150dp"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
             android:src="@drawable/men_care"
             android:scaleType="fitXY"
             android:layout_margin="5dp"
@@ -24,11 +28,29 @@
             android:id="@+id/topsell_sample_name"
             android:layout_below="@+id/topsell_sample_image"
             android:textAlignment="center"
-            android:textStyle="bold|italic"
-            android:textSize="20dp"
-            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:textSize="15dp"
+            android:textColor="#111111"
             android:layout_margin="5dp"
+            android:autoSizeTextType="uniform"
+            android:ellipsize="end"
+            android:maxLines="2"
             android:text="Men Personal Care"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/topsell_sample_price"
+            android:layout_below="@+id/topsell_sample_name"
+            android:textAlignment="center"
+            android:textStyle="bold|italic"
+            android:layout_centerInParent="true"
+            android:textSize="15dp"
+            android:textColor="@color/colorPrimary"
+            android:layout_margin="5dp"
+            android:autoSizeTextType="uniform"
+            android:maxLines="1"
+            android:text="Price Default"/>
 
     </RelativeLayout>
 

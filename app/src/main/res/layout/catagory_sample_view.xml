@@ -1,32 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@drawable/background"
-    android:elevation="20dp"
-    >
+    android:layout_margin="3dp"
+    app:cardCornerRadius="10dp"
+    android:elevation="10dp">
 
     <RelativeLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/rl2">
 
     <ImageView
-        android:layout_width="120dp"
+        android:layout_width="150dp"
         android:layout_height="150dp"
         android:src="@drawable/men_care"
         android:scaleType="fitXY"
 
         android:id="@+id/catagory_sample_image"/>
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/catagory_sample_name"
+        android:layout_centerInParent="true"
         android:layout_below="@+id/catagory_sample_image"
         android:textAlignment="center"
         android:textStyle="bold"
-        android:textSize="15dp"
+        android:maxLines="2"
+        android:padding="10dp"
+        android:textColor="#111111"
+        android:textSize="10dp"
         android:text="Men Personal Care"/>
 
     </RelativeLayout>

@@ -1,0 +1,22 @@
+query FootwareCatagory{
+    category(id: "95") {
+        name
+        products {
+            product_id
+            name
+            image
+            images {
+                image
+            }
+            meta_description
+            stock_status
+            quantity
+            description
+            price
+            weight
+            length
+            width
+            height
+        }
+    }
+}
