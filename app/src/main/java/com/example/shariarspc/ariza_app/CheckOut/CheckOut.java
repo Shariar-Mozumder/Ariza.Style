@@ -237,7 +237,6 @@ public class CheckOut extends AppCompatActivity {
                     //cq[0] =response.data().addItemToCart().items().get(0);
                     // cp = Objects.requireNonNull(response.data().addItemToCart()).total();
                     // cp[0] =response.data().addItemToCart().items().get(0).;
-
                 }
 
                 @Override
