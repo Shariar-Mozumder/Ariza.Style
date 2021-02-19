@@ -347,12 +347,17 @@ public class CheckOut extends AppCompatActivity {
 //                        startActivity(intent);
 //                    }
 
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+
+
 
 
                     apolloClient.query(new CartQuery()).enqueue(new ApolloCall.Callback<CartQuery.Data>() {
                         @Override
                         public void onResponse(@NotNull Response<CartQuery.Data> response) {
-                            Log.d("cartQuerydekhi", "Query: "+response.data());
+                            Log.d("QueryofCarItems", "Query: "+response.data());
 
                         }
 
@@ -361,6 +366,9 @@ public class CheckOut extends AppCompatActivity {
                             Log.d("cartQuerydekhi", "onResponse: "+e);
                         }
                     });
+
+                        }
+                    },3000);
 
 
                 }
