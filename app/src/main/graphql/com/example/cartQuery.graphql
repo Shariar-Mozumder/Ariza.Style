@@ -4,8 +4,7 @@ query CartQuery{
             cart_id,product_id,name,quantity,
             option{
                 name,
-                product_option_value{
-                    name}
+                value
             }
         }
     }

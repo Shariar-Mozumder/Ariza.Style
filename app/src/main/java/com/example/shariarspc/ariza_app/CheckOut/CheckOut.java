@@ -216,8 +216,8 @@ public class CheckOut extends AppCompatActivity {
 
 
 
-            CartItemInput cartItemInput= CartItemInput.builder().product_id(pid)
-                    .quantity(quantity).options(oplist).recurring_id("").build();
+            CartItemInput cartItemInput= CartItemInput.builder().product_id("2046")
+                    .quantity(1).options(oplist).recurring_id("").build();
 
 
 
@@ -225,6 +225,8 @@ public class CheckOut extends AppCompatActivity {
                 @Override
                 public void onResponse(@NotNull Response<AddToCartItemsMutation.Data> response) {
                     assert response.data() != null;
+                    Log.d("cartQuerydekhi_Mutation", "Total: "+response.data().addItemToCart().total());
+
 //                    int size=response.data().addItemToCart().items().size();
 ////                    cid=new String[size];
 ////
@@ -350,8 +352,8 @@ public class CheckOut extends AppCompatActivity {
                     apolloClient.query(new CartQuery()).enqueue(new ApolloCall.Callback<CartQuery.Data>() {
                         @Override
                         public void onResponse(@NotNull Response<CartQuery.Data> response) {
-                            Log.d("cartQuerydekhi", "onResponse: "+response.data().cart().total());
-                            Log.d("cartQuerydekhi", "onResponse: "+response.data().cart().items());
+                            Log.d("cartQuerydekhi", "Query: "+response.data());
+
                         }
 
                         @Override
