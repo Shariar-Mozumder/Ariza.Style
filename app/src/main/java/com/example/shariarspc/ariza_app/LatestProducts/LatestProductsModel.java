@@ -2,137 +2,157 @@ package com.example.shariarspc.ariza_app.LatestProducts;
 
 public class LatestProductsModel {
 
-    String image;
-    String product_name;
-    String price;
-    String description;
-    String productID;
-    String[] images;
-    String metadescription;
-    String stockstatus;
-    String quantity;
-    String weight;
-    String length;
-    String width;
-    String height;
+    String imagelatest;
+    String product_namelatest;
+    String pricelatest;
+    String descriptionlatest;
+    String productIDlatest;
+    String[] imageslatest;
+    String metadescriptionlatest;
+    String stockstatuslatest;
+    String quantitylatest;
+    String weightlatest;
+    String lengthlatest;
+    String widthlatest;
+    String heightlatest;
+    String modellatest;
+    String[] sizelatest;
 
-    public LatestProductsModel(String image, String product_name, String price, String description, String productID, String[] images, String metadescription, String stockstatus, String quantity, String weight, String length, String width, String height) {
-        this.image = image;
-        this.product_name = product_name;
-        this.price = price;
-        this.description = description;
-        this.productID = productID;
-        this.images = images;
-        this.metadescription = metadescription;
-        this.stockstatus = stockstatus;
-        this.quantity = quantity;
-        this.weight = weight;
-        this.length = length;
-        this.width = width;
-        this.height = height;
+    public LatestProductsModel(String imagelatest, String product_namelatest, String pricelatest, String descriptionlatest, String productIDlatest, String[] imageslatest, String metadescriptionlatest, String stockstatuslatest, String quantitylatest, String weightlatest, String lengthlatest, String widthlatest, String heightlatest,String modellatest,String[] sizelatest) {
+        this.imagelatest = imagelatest;
+        this.product_namelatest = product_namelatest;
+        this.pricelatest = pricelatest;
+        this.descriptionlatest = descriptionlatest;
+        this.productIDlatest = productIDlatest;
+        this.imageslatest = imageslatest;
+        this.metadescriptionlatest = metadescriptionlatest;
+        this.stockstatuslatest = stockstatuslatest;
+        this.quantitylatest = quantitylatest;
+        this.weightlatest = weightlatest;
+        this.lengthlatest = lengthlatest;
+        this.widthlatest = widthlatest;
+        this.heightlatest = heightlatest;
+        this.modellatest=modellatest;
+        this.sizelatest=sizelatest;
     }
 
-    public String[] getImages() {
-        return images;
+    public String getModellatest() {
+        return modellatest;
     }
 
-    public void setImages(String[] images) {
-        this.images = images;
+    public void setModellatest(String modellatest) {
+        this.modellatest = modellatest;
     }
 
-    public String getMetadescription() {
-        return metadescription;
+    public String[] getSizelatest() {
+        return sizelatest;
     }
 
-    public void setMetadescription(String metadescription) {
-        this.metadescription = metadescription;
+    public void setSizelatest(String[] sizelatest) {
+        this.sizelatest = sizelatest;
     }
 
-    public String getStockstatus() {
-        return stockstatus;
+    public String getImagelatest() {
+        return imagelatest;
     }
 
-    public void setStockstatus(String stockstatus) {
-        this.stockstatus = stockstatus;
+    public void setImagelatest(String imagelatest) {
+        this.imagelatest = imagelatest;
     }
 
-    public String getQuantity() {
-        return quantity;
+    public String getProduct_namelatest() {
+        return product_namelatest;
     }
 
-    public void setQuantity(String quantity) {
-        this.quantity = quantity;
+    public void setProduct_namelatest(String product_namelatest) {
+        this.product_namelatest = product_namelatest;
     }
 
-    public String getWeight() {
-        return weight;
+    public String getPricelatest() {
+        return pricelatest;
     }
 
-    public void setWeight(String weight) {
-        this.weight = weight;
+    public void setPricelatest(String pricelatest) {
+        this.pricelatest = pricelatest;
     }
 
-    public String getLength() {
-        return length;
+    public String getDescriptionlatest() {
+        return descriptionlatest;
     }
 
-    public void setLength(String length) {
-        this.length = length;
+    public void setDescriptionlatest(String descriptionlatest) {
+        this.descriptionlatest = descriptionlatest;
     }
 
-    public String getWidth() {
-        return width;
+    public String getProductIDlatest() {
+        return productIDlatest;
     }
 
-    public void setWidth(String width) {
-        this.width = width;
+    public void setProductIDlatest(String productIDlatest) {
+        this.productIDlatest = productIDlatest;
     }
 
-    public String getHeight() {
-        return height;
+    public String[] getImageslatest() {
+        return imageslatest;
     }
 
-    public void setHeight(String height) {
-        this.height = height;
+    public void setImageslatest(String[] imageslatest) {
+        this.imageslatest = imageslatest;
     }
 
-    public String getProductID() {
-        return productID;
+    public String getMetadescriptionlatest() {
+        return metadescriptionlatest;
     }
 
-    public void setProductID(String productID) {
-        this.productID = productID;
+    public void setMetadescriptionlatest(String metadescriptionlatest) {
+        this.metadescriptionlatest = metadescriptionlatest;
     }
 
-    public String getPrice() {
-        return price;
+    public String getStockstatuslatest() {
+        return stockstatuslatest;
     }
 
-    public void setPrice(String price) {
-        this.price = price;
+    public void setStockstatuslatest(String stockstatuslatest) {
+        this.stockstatuslatest = stockstatuslatest;
     }
 
-    public String getDescription() {
-        return description;
+    public String getQuantitylatest() {
+        return quantitylatest;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setQuantitylatest(String quantitylatest) {
+        this.quantitylatest = quantitylatest;
     }
 
-    public String getImage() {
-        return image;
+    public String getWeightlatest() {
+        return weightlatest;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setWeightlatest(String weightlatest) {
+        this.weightlatest = weightlatest;
     }
 
-    public String getProduct_name() {
-        return product_name;
+    public String getLengthlatest() {
+        return lengthlatest;
     }
 
-    public void setProduct_name(String product_name) {
-        this.product_name = product_name;
+    public void setLengthlatest(String lengthlatest) {
+        this.lengthlatest = lengthlatest;
+    }
+
+    public String getWidthlatest() {
+        return widthlatest;
+    }
+
+    public void setWidthlatest(String widthlatest) {
+        this.widthlatest = widthlatest;
+    }
+
+    public String getHeightlatest() {
+        return heightlatest;
+    }
+
+    public void setHeightlatest(String heightlatest) {
+        this.heightlatest = heightlatest;
     }
 }

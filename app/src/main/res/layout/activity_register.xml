@@ -13,24 +13,13 @@
 
 
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Registration"
-            android:textSize="25dp"
-            android:background="@drawable/input_design"
-            android:textStyle="bold"
-            android:textAlignment="center"
-            android:padding="5dp"
-            android:layout_margin="10dp"
-            android:id="@+id/RegistrationTV"/>
+
 
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="250dp"
             android:src="@drawable/ariza"
             android:layout_margin="10dp"
-            android:layout_below="@+id/RegistrationTV"
             android:id="@+id/logoArizaIdregistration"/>
 
         <EditText
@@ -64,6 +53,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Phone Number"
+            android:inputType="phone"
             android:id="@+id/phoneNumberRegister"
             android:layout_margin="10dp"
             android:layout_below="@+id/emailRegister"
@@ -126,6 +116,7 @@
             android:id="@+id/RegisterBTn"
             android:textSize="20dp"
             android:layout_margin="20dp"
+            android:textColor="@android:color/white"
             android:layout_below="@+id/checkTerms"
             android:background="@drawable/buttons"
             android:padding="10dp"
@@ -133,12 +124,13 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Already Registerd? Login"
+            android:text="Login"
             android:layout_below="@+id/RegisterBTn"
             android:id="@+id/AlreadyRegisterdText"
             android:textSize="20dp"
             android:background="@drawable/input_design"
             android:textStyle="bold"
+            android:textColor="@color/colorPrimary"
             android:textAlignment="center"
             android:padding="10dp"
             android:layout_marginRight="20dp"

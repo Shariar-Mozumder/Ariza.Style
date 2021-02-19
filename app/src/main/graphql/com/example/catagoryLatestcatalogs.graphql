@@ -16,7 +16,9 @@ query LatestCatalog{
             weight
             length
             width
-            height
+            height,
+            model,
+            options{name,product_option_value{name}}
         }
     }
 }

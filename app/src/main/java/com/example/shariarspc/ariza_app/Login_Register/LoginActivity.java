@@ -99,7 +99,8 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void onResponse(@NotNull Response<UserloginMutation.Data> response) {
                            // Toast.makeText(LoginActivity.this, "LoggedIn Successfully" + response.data(), Toast.LENGTH_SHORT).show();
-                            Log.d("LoginData", "onResponse: " + response.data());
+
+                         //   Log.d("LoginData", "onResponse: " + response.data().login().toString());
                             Intent intent = new Intent(LoginActivity.this, CartProductShow.class);
                             startActivity(intent);
                         }

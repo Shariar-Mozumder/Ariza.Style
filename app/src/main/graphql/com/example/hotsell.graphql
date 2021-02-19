@@ -12,7 +12,9 @@ query HotsellQuery{
         weight,
         length,
         width,
-        height
+        height,
+        model,
+        options{name,product_option_value{name}}
     }
 
 }

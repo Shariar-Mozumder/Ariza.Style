@@ -84,33 +84,33 @@ public class GridRecyclerViewAdapterforCatagoryProduct extends RecyclerView.Adap
             //oldme
            // ((DataViewHolder) viewHolder).textView.setText(dataList.get(i));
             //newme
-            ((DataViewHolder) viewHolder).textView.setText(datalist1.get(i).getProduct_name());
-            ((DataViewHolder) viewHolder).textdescription.setText(datalist1.get(i).getDescription());
-            ((DataViewHolder) viewHolder).textPrice.setText(datalist1.get(i).getPrice());
+            ((DataViewHolder) viewHolder).textView.setText(datalist1.get(i).getProduct_namelatest());
+            ((DataViewHolder) viewHolder).textdescription.setText(datalist1.get(i).getDescriptionlatest());
+            ((DataViewHolder) viewHolder).textPrice.setText(datalist1.get(i).getPricelatest());
            // ((DataViewHolder) viewHolder).imageView.setImageResource(datalist1.get(i).getImage());
 
-            Picasso.get().load(datalist1.get(i).getImage()).into(((DataViewHolder) viewHolder).imageView);
+            Picasso.get().load(datalist1.get(i).getImagelatest()).into(((DataViewHolder) viewHolder).imageView);
 
-            productID=datalist1.get(i).getProductID();
-            images=datalist1.get(i).getImages();
-            metadescription=datalist1.get(i).getMetadescription();
-            price=datalist1.get(i).getPrice();
-            name=datalist1.get(i).getProduct_name();
-            stockstatus=datalist1.get(i).getStockstatus();
-            quantity=datalist1.get(i).getQuantity();
-            description=datalist1.get(i).getDescription();
-            weight=datalist1.get(i).getWeight();
-            length=datalist1.get(i).getLength();
-            width=datalist1.get(i).getWidth();
-            height=datalist1.get(i).getHeight();
-            image=datalist1.get(i).getImage();
+            productID=datalist1.get(i).getProductIDlatest();
+            images=datalist1.get(i).getImageslatest();
+            metadescription=datalist1.get(i).getMetadescriptionlatest();
+            price=datalist1.get(i).getPricelatest();
+            name=datalist1.get(i).getProduct_namelatest();
+            stockstatus=datalist1.get(i).getStockstatuslatest();
+            quantity=datalist1.get(i).getQuantitylatest();
+            description=datalist1.get(i).getDescriptionlatest();
+            weight=datalist1.get(i).getWeightlatest();
+            length=datalist1.get(i).getLengthlatest();
+            width=datalist1.get(i).getWidthlatest();
+            height=datalist1.get(i).getHeightlatest();
+            image=datalist1.get(i).getImagelatest();
         }
     }
     @Override
     public int getItemViewType(int position)
     {//if data is load, returns Progressbar viewtype.
         //oldme
-        return datalist1.get(position).getProduct_name() == "load" ? VIEW_TYPE_PROGRESS : VIEW_TYPE_DATA;
+        return datalist1.get(position).getProduct_namelatest() == "load" ? VIEW_TYPE_PROGRESS : VIEW_TYPE_DATA;
     }
     @Override
     public int getItemCount()

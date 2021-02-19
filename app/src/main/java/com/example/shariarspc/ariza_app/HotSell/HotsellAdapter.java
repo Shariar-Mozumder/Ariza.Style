@@ -17,9 +17,11 @@ import com.example.shariarspc.ariza_app.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class HotsellAdapter extends RecyclerView.Adapter<HotsellAdapter.MyViewHolder> {
     private Context context;
+    HashMap optionMap;
     private ArrayList<HotsellModel> hotList;
     private static String productID;
     private static String[] images;
@@ -52,23 +54,26 @@ public class HotsellAdapter extends RecyclerView.Adapter<HotsellAdapter.MyViewHo
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
-        Picasso.get().load(hotList.get(position).getImage()).into(holder.imageView);
+        Picasso.get().load(hotList.get(position).getImagehot()).into(holder.imageView);
         //holder.imageView.setImageResource(hotList.get(position).getImage());
-        holder.textView.setText(hotList.get(position).getProduct_name());
-        holder.priceText.setText(hotList.get(position).getPrice());
-        productID=hotList.get(position).getProductID();
-        images=hotList.get(position).getImages();
-        metadescription=hotList.get(position).getMetadescription();
-        price=hotList.get(position).getPrice();
-        name=hotList.get(position).getProduct_name();
-        stockstatus=hotList.get(position).getStockstatus();
-        quantity=hotList.get(position).getQuantity();
-        description=hotList.get(position).getDescription();
-        weight=hotList.get(position).getWeight();
-        length=hotList.get(position).getLength();
-        width=hotList.get(position).getWidth();
-        height=hotList.get(position).getHeight();
-        image=hotList.get(position).getImage();
+        holder.textView.setText(hotList.get(position).getProduct_namehot());
+        holder.priceText.setText(hotList.get(position).getPricehot());
+        productID=hotList.get(position).getProductIDhot();
+        images=hotList.get(position).getImageshot();
+        metadescription=hotList.get(position).getMetadescriptionhot();
+        price=hotList.get(position).getPricehot();
+        name=hotList.get(position).getProduct_namehot();
+        stockstatus=hotList.get(position).getStockstatushot();
+        quantity=hotList.get(position).getQuantityhot();
+        description=hotList.get(position).getDescriptionhot();
+        weight=hotList.get(position).getWeighthot();
+        length=hotList.get(position).getLengthhot();
+        width=hotList.get(position).getWidthhot();
+        height=hotList.get(position).getHeighthot();
+        image=hotList.get(position).getImagehot();
+        optionMap=hotList.get(position).getOptionMap();
+
+
     }
 
     @Override

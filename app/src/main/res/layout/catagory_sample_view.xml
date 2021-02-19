@@ -5,9 +5,9 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@drawable/background"
-    android:layout_margin="3dp"
-    app:cardCornerRadius="10dp"
-    android:elevation="10dp">
+    android:layout_margin="2dp"
+    app:cardCornerRadius="3dp"
+    android:elevation="5dp">
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -16,7 +16,7 @@
 
     <ImageView
         android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_height="120dp"
         android:src="@drawable/men_care"
         android:scaleType="fitXY"
 

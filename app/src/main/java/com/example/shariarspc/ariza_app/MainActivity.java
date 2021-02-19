@@ -20,6 +20,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -48,6 +49,8 @@ import com.example.shariarspc.ariza_app.Login_Register.LoginActivity;
 import com.example.shariarspc.ariza_app.Login_Register.RegisterActivity;
 import com.example.shariarspc.ariza_app.TopSell.TopsellAdapter;
 import com.example.shariarspc.ariza_app.TopSell.TopsellModel;
+import com.example.shariarspc.ariza_app.banner.BannerAdapter;
+import com.example.shariarspc.ariza_app.banner.BannerModel;
 import com.google.android.material.navigation.NavigationView;
 import com.smarteist.autoimageslider.SliderLayout;
 import com.smarteist.autoimageslider.SliderView;
@@ -58,8 +61,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -85,6 +91,7 @@ public class MainActivity extends AppCompatActivity implements TopsellAdapter.On
     Handler handler4 = new Handler();
     Handler handler5 = new Handler();
     Handler handler6 = new Handler();
+    Handler handler7 = new Handler();
 
     ProgressDialog progressDialog,intialProgress;
     int totallatestProductCount = 10;
@@ -93,29 +100,36 @@ public class MainActivity extends AppCompatActivity implements TopsellAdapter.On
     GridRecyclerViewAdapter gridRecyclerViewAdapter;
 
     GridView gridView;
-    RecyclerView recyclerView_top_sell, recyclerView_hot_sell, recyclerView_latest_products, gridview_latest_product;
+    RecyclerView recyclerView_top_sell, recyclerView_hot_sell, recyclerView_latest_products,banner_recyclerView;
     TopsellAdapter topsellAdapter;
     HotsellAdapter hotsellAdapter;
+    BannerAdapter bannerAdapter;
 
-    LatestProductsModel latestProductsModel;
+
+    //LatestProductsModel latestProductsModel;
 
 
-    int[] catagory_imgs = {R.drawable.accessories, R.drawable.beauty, R.drawable.footware,
-            R.drawable.selwar_kameez, R.drawable.sharee, R.drawable.western,
-            R.drawable.pant, R.drawable.men_care, R.drawable.seemore};
+//    int[] catagory_imgs = {R.drawable.accessories, R.drawable.beauty, R.drawable.footware,
+//            R.drawable.selwar_kameez, R.drawable.sharee, R.drawable.western,
+//            R.drawable.pant, R.drawable.men_care, R.drawable.seemore};
+//
+//    int[] latest_imgs = {R.drawable.accessories, R.drawable.beauty, R.drawable.footware,
+//            R.drawable.selwar_kameez, R.drawable.sharee, R.drawable.western,
+//            R.drawable.pant, R.drawable.men_care, R.drawable.seemore,
+//            R.drawable.accessories, R.drawable.beauty, R.drawable.footware,
+//            R.drawable.selwar_kameez, R.drawable.sharee, R.drawable.western,
+//            R.drawable.pant, R.drawable.men_care, R.drawable.seemore,
+//            R.drawable.accessories, R.drawable.beauty, R.drawable.footware,
+//            R.drawable.selwar_kameez, R.drawable.sharee, R.drawable.western,
+//            R.drawable.pant, R.drawable.men_care, R.drawable.seemore,
+//            R.drawable.accessories, R.drawable.beauty, R.drawable.footware,
+//            R.drawable.selwar_kameez, R.drawable.sharee, R.drawable.western,
+//            R.drawable.pant, R.drawable.men_care};
 
-    int[] latest_imgs = {R.drawable.accessories, R.drawable.beauty, R.drawable.footware,
-            R.drawable.selwar_kameez, R.drawable.sharee, R.drawable.western,
-            R.drawable.pant, R.drawable.men_care, R.drawable.seemore,
-            R.drawable.accessories, R.drawable.beauty, R.drawable.footware,
-            R.drawable.selwar_kameez, R.drawable.sharee, R.drawable.western,
-            R.drawable.pant, R.drawable.men_care, R.drawable.seemore,
-            R.drawable.accessories, R.drawable.beauty, R.drawable.footware,
-            R.drawable.selwar_kameez, R.drawable.sharee, R.drawable.western,
-            R.drawable.pant, R.drawable.men_care, R.drawable.seemore,
-            R.drawable.accessories, R.drawable.beauty, R.drawable.footware,
-            R.drawable.selwar_kameez, R.drawable.sharee, R.drawable.western,
-            R.drawable.pant, R.drawable.men_care};
+    int[] addsBanners={R.drawable.banner2,R.drawable.banner4};
+
+
+    ExecutorService executorService = Executors.newFixedThreadPool(32); // you can number of threads you want
 
 
     String[] catagory_names, latest_products_names;
@@ -136,6 +150,8 @@ public class MainActivity extends AppCompatActivity implements TopsellAdapter.On
     static String[] ToplengthFatches;
     static String[] TopwidthFatches;
     static String[] TopheightFatches;
+    static String[][] TopsizeFatches;
+    static String[] TopmodelFatches;
 
 
     static String[] HotImageFatches;
@@ -151,6 +167,9 @@ public class MainActivity extends AppCompatActivity implements TopsellAdapter.On
     static String[] HotlengthFatches;
     static String[] HotwidthFatches;
     static String[] HotheightFatches;
+    static String[][] HotsizeFatches;
+    static String[] HotmodelFatches;
+    static HashMap[] HotoptionFatches;
 
     static String[] latestNameFatches;
     static String[] latestIDFatches;
@@ -167,13 +186,17 @@ public class MainActivity extends AppCompatActivity implements TopsellAdapter.On
     static String[] latestlengthFatches;
     static String[] latestwidthFatches;
     static String[] latestheightFatches;
+    static String[][] latestsizeFatches;
+    static String[] latestmodelFatches;
 
 
 
     ArrayList<TopsellModel> topList;
     ArrayList<HotsellModel> hotList;
     //newme
-    ArrayList<LatestProductsModel> datalist1 = new ArrayList<>();
+    ArrayList<LatestProductsModel> datalist1;
+
+    ArrayList<BannerModel> bannerList;
 
     // ArrayList<LatestProductsModel> dataList;
     //oldme
@@ -202,15 +225,22 @@ public class MainActivity extends AppCompatActivity implements TopsellAdapter.On
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 if (item.getItemId()==R.id.profileMenuID){
+                    drawerLayout.closeDrawer(GravityCompat.START);
                     Intent intent=new Intent(MainActivity.this, LoginActivity.class);
                     startActivity(intent);
                 }
 
+                else if (item.getItemId()==R.id.homeMenuID){
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                }
+
                 else if (item.getItemId()==R.id.cartMenuID){
+                    drawerLayout.closeDrawer(GravityCompat.START);
                     Intent intent=new Intent(MainActivity.this, CartProductShow.class);
                     startActivity(intent);
                 }
                 else if(item.getItemId()==R.id.signUpMenuID){
+                    drawerLayout.closeDrawer(GravityCompat.START);
                     Intent intent=new Intent(MainActivity.this, RegisterActivity.class);
                     startActivity(intent);
                 }
@@ -314,6 +344,7 @@ public class MainActivity extends AppCompatActivity implements TopsellAdapter.On
         recyclerView_top_sell = findViewById(R.id.top_sell_recyclerView);
         recyclerView_hot_sell = findViewById(R.id.hot_sell_recyclerView);
         recyclerView_latest_products = findViewById(R.id.latest_products_recyclerView);
+        banner_recyclerView=findViewById(R.id.banner_recyclerView);
 
 
         catagory_names = getResources().getStringArray(R.array.Catagory_names);
@@ -331,6 +362,9 @@ public class MainActivity extends AppCompatActivity implements TopsellAdapter.On
 
 
 
+
+
+
         catagoryquery();
       //  latestProductqueryList1();
         topSellProductQuery();
@@ -342,8 +376,13 @@ public class MainActivity extends AppCompatActivity implements TopsellAdapter.On
        // loadLIST();
 
        // latestProductListShow();
-        latestProductqueryList();
+
        // intialProgress.dismiss();
+        bannerInIT();
+        latestProductqueryList();
+        //latestProductqueryGrid();
+
+
 
 
         listBtn.setOnClickListener(new View.OnClickListener() {
@@ -369,6 +408,8 @@ public class MainActivity extends AppCompatActivity implements TopsellAdapter.On
         // latestRecyclerListInIT();
 
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -417,12 +458,10 @@ public class MainActivity extends AppCompatActivity implements TopsellAdapter.On
                     public void onResponse(@NotNull Response<CatagoryDetailsQuery.Data> response) {
                         //Log.e("Apollo", "Launch site: " + response.getData().launch.site);
 
-                        handler1.postDelayed(new Runnable() {
-                            @Override
+
+                        executorService.execute(new Runnable() {
                             public void run() {
-
-
-                               // Log.d("Apollo", "onResponse: " + response.data().categories().size());
+                                //do your work1 here
                                 catagoryNamesFatches = new String[response.data().categories().size()];
                                 catagoryImageFatches=new String[response.data().categories().size()];
                                 catagoryIDFatches=new String[response.data().categories().size()];
@@ -435,22 +474,43 @@ public class MainActivity extends AppCompatActivity implements TopsellAdapter.On
                                     catagoryImageFatches[i]="https://ariza.style/image/"+catImages;
                                     catagoryIDFatches[i]=catID;
 
-                                   // getBitmapFromURL(catagoryImageFatches[i]);
+                                    // getBitmapFromURL(catagoryImageFatches[i]);
 
 //                                    TopsellModel topsellModel = new TopsellModel(catagory_imgs[i], catagoryNamesFatches[i]);
 //                                    topList.add(topsellModel);
 
 
 
-                                   // Log.d("Apollo", "onResponse: " + catagoryNamesFatches[i]);
-                                  //  Toast.makeText(MainActivity.this, catagoryNamesFatches[i], Toast.LENGTH_SHORT).show();
+                                    // Log.d("Apollo", "onResponse: " + catagoryNamesFatches[i]);
+                                    //  Toast.makeText(MainActivity.this, catagoryNamesFatches[i], Toast.LENGTH_SHORT).show();
 
                                 }
 
 
+
+                            }
+                        });
+
+//                        runOnUiThread(new Runnable() {
+//
+//                            @Override
+//                            public void run() {
+//
+//                                // Stuff that updates the UI
+//
+//
+//                            }
+//                        });
+
+                        handler1.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+
+
+                               // Log.d("Apollo", "onResponse: " + response.data().categories().size());
+
                                 CustomAdapter adapter = new CustomAdapter(getApplicationContext(), catagoryImageFatches, catagoryNamesFatches,catagoryIDFatches);
                                 gridView.setAdapter(adapter);
-
 
                             }
 
@@ -485,59 +545,125 @@ public class MainActivity extends AppCompatActivity implements TopsellAdapter.On
                 .enqueue(new ApolloCall.Callback<HotsellQuery.Data>() {
                     @Override
                     public void onResponse(@NotNull Response<HotsellQuery.Data> response) {
+
+
+                                executorService.execute(new Runnable() {
+                                    public void run() {
+                                        //do your work1 here
+
+                                        assert response.data() != null;
+                                        HotNameFatches=new String[Objects.requireNonNull(response.data().popularProducts()).size()];
+                                        HotImageFatches=new String[Objects.requireNonNull(response.data().popularProducts()).size()];
+                                        HotPriceFatches=new String[Objects.requireNonNull(response.data().popularProducts()).size()];
+                                        HotIDFatches=new String[Objects.requireNonNull(response.data().popularProducts()).size()];
+                                        HotimagesFatches=new String[Objects.requireNonNull(response.data().popularProducts()).size()][10];
+                                        HotmetadescriptionFatches=new String[Objects.requireNonNull(response.data().popularProducts()).size()];
+                                        HotstockstatusFatches=new String[Objects.requireNonNull(response.data().popularProducts()).size()];
+                                        HotquantityFatches=new String[Objects.requireNonNull(response.data().popularProducts()).size()];
+                                        HotdescriptionFatches=new String[Objects.requireNonNull(response.data().popularProducts()).size()];
+                                        HotweightFatches=new String[Objects.requireNonNull(response.data().popularProducts()).size()];
+                                        HotlengthFatches=new String[Objects.requireNonNull(response.data().popularProducts()).size()];
+                                        HotwidthFatches=new String[Objects.requireNonNull(response.data().popularProducts()).size()];
+                                        HotheightFatches=new String[Objects.requireNonNull(response.data().popularProducts()).size()];
+                                        HotsizeFatches=new String[Objects.requireNonNull(response.data().popularProducts()).size()][10];
+                                        HotmodelFatches=new String[Objects.requireNonNull(response.data().popularProducts()).size()];
+                                        HotoptionFatches=new HashMap[Objects.requireNonNull(response.data().popularProducts()).size()];
+
+                                        for(int i = 0; i< Objects.requireNonNull(response.data().popularProducts()).size(); i++){
+                                            String hotNames= Objects.requireNonNull(response.data().popularProducts()).get(i).name();
+                                            String hotImages= Objects.requireNonNull(response.data().popularProducts()).get(i).image();
+                                            String hotPrice1= Objects.requireNonNull(response.data().popularProducts()).get(i).price();
+                                            hotPrice1=hotPrice1.substring(hotPrice1.indexOf(hotPrice1,0),hotPrice1.indexOf('.')+3);
+                                            String hotPrice= hotPrice1;
+                                            String hotID= Objects.requireNonNull(response.data().popularProducts()).get(i).product_id();
+                                            int size= Objects.requireNonNull(Objects.requireNonNull(response.data().popularProducts()).get(i).images()).size();
+                                            String[] hotimages = new String[size];
+                                            for (int i1=0;i1<size;i1++){
+
+                                                hotimages[i1]= String.valueOf(Objects.requireNonNull(response.data().popularProducts()).get(i).images());
+                                            }
+
+                                            String hotmetadescription= Objects.requireNonNull(response.data().popularProducts()).get(i).meta_description();
+                                            String hotstock= Objects.requireNonNull(response.data().popularProducts()).get(i).stock_status();
+                                            String hotquantity= Objects.requireNonNull(response.data().popularProducts()).get(i).quantity();
+                                            String hotdescription= Objects.requireNonNull(response.data().popularProducts()).get(i).description();
+                                            String hotweight= Objects.requireNonNull(response.data().popularProducts()).get(i).weight();
+                                            String hotlength= Objects.requireNonNull(response.data().popularProducts()).get(i).length().toString();
+                                            String hotwidth= Objects.requireNonNull(response.data().popularProducts()).get(i).width().toString();
+                                            String hotheight= Objects.requireNonNull(response.data().popularProducts()).get(i).height().toString();
+                                            int hsize = 0;
+                                            int vSize=0;
+                                            try {
+                                                hsize=Objects.requireNonNull(Objects.requireNonNull(Objects.requireNonNull(response.data().popularProducts()).get(i).options())).size();
+
+                                            }catch (Exception e){
+
+                                            }
+
+                                            HashMap<String,String[]> optionsMaphot=new HashMap<>();
+                                            for (int j=0;j<hsize;j++){
+                                                String name= response.data().popularProducts().get(i).options().get(j).name();
+                                                try {
+                                                    vSize=Objects.requireNonNull(Objects.requireNonNull(Objects.requireNonNull(response.data().popularProducts()).get(i).options().get(j).product_option_value())).size();
+                                                }catch (Exception e){
+
+                                                }
+                                                String[] valueAll=new String[vSize];
+                                                for (int k=0;k<vSize;k++){
+                                                    String value=response.data().popularProducts().get(i).options().get(j).product_option_value().get(k).name();
+                                                    valueAll[k]=value;
+
+                                                }
+
+                                                optionsMaphot.put(name,valueAll);
+
+                                            }
+
+
+
+
+                                            int hsize1 = 0;
+                                            // int vSize=0;
+                                            try {
+                                                hsize1=Objects.requireNonNull(Objects.requireNonNull(Objects.requireNonNull(response.data().popularProducts()).get(i).options().get(0).product_option_value())).size();
+
+                                            }catch (Exception e){
+
+                                            }
+                                            String[] hotsize=new String[hsize1];
+                                            for(int i1=0;i1<hsize1;i1++){
+                                                hotsize[i1] = Objects.requireNonNull(Objects.requireNonNull(Objects.requireNonNull(response.data().popularProducts()).get(i).options()).get(0).product_option_value()).get(i1).name();
+
+                                            }
+
+
+
+                                            String hotmodel=response.data().popularProducts().get(i).model();
+
+                                            HotNameFatches[i]=hotNames;
+                                            HotImageFatches[i]="https://ariza.style/image/"+hotImages;
+                                            HotPriceFatches[i]=hotPrice+" BDT";
+                                            HotIDFatches[i]=hotID;
+                                            HotimagesFatches[i]=hotimages;
+                                            HotmetadescriptionFatches[i]=hotmetadescription;
+                                            HotstockstatusFatches[i]=hotstock;
+                                            HotquantityFatches[i]=hotquantity;
+                                            HotdescriptionFatches[i]=hotdescription;
+                                            HotweightFatches[i]=hotweight;
+                                            HotlengthFatches[i]=hotlength;
+                                            HotwidthFatches[i]=hotwidth;
+                                            HotheightFatches[i]=hotheight;
+                                            HotsizeFatches[i]=hotsize;
+                                            HotmodelFatches[i]=hotmodel;
+                                            HotoptionFatches[i]=optionsMaphot;
+                                        }
+                                    }
+                                });
+
                         handler3.postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                assert response.data() != null;
-                                HotNameFatches=new String[Objects.requireNonNull(response.data().popularProducts()).size()];
-                                HotImageFatches=new String[Objects.requireNonNull(response.data().popularProducts()).size()];
-                                HotPriceFatches=new String[Objects.requireNonNull(response.data().popularProducts()).size()];
-                                HotIDFatches=new String[Objects.requireNonNull(response.data().popularProducts()).size()];
-                                HotimagesFatches=new String[Objects.requireNonNull(response.data().popularProducts()).size()][10];
-                                HotmetadescriptionFatches=new String[Objects.requireNonNull(response.data().popularProducts()).size()];
-                                HotstockstatusFatches=new String[Objects.requireNonNull(response.data().popularProducts()).size()];
-                                HotquantityFatches=new String[Objects.requireNonNull(response.data().popularProducts()).size()];
-                                HotdescriptionFatches=new String[Objects.requireNonNull(response.data().popularProducts()).size()];
-                                HotweightFatches=new String[Objects.requireNonNull(response.data().popularProducts()).size()];
-                                HotlengthFatches=new String[Objects.requireNonNull(response.data().popularProducts()).size()];
-                                HotwidthFatches=new String[Objects.requireNonNull(response.data().popularProducts()).size()];
-                                HotheightFatches=new String[Objects.requireNonNull(response.data().popularProducts()).size()];
 
-                                for(int i = 0; i< Objects.requireNonNull(response.data().popularProducts()).size(); i++){
-                                    String hotNames= Objects.requireNonNull(response.data().popularProducts()).get(i).name();
-                                    String hotImages= Objects.requireNonNull(response.data().popularProducts()).get(i).image();
-                                    String hotPrice= Objects.requireNonNull(response.data().popularProducts()).get(i).price();
-                                    String hotID= Objects.requireNonNull(response.data().popularProducts()).get(i).product_id();
-                                    int size= Objects.requireNonNull(Objects.requireNonNull(response.data().popularProducts()).get(i).images()).size();
-                                    String[] hotimages = new String[size];
-                                    for (int i1=0;i1<size;i1++){
-
-                                        hotimages[i1]= String.valueOf(Objects.requireNonNull(response.data().popularProducts()).get(i).images());
-                                    }
-
-                                    String hotmetadescription= Objects.requireNonNull(response.data().popularProducts()).get(i).meta_description();
-                                    String hotstock= Objects.requireNonNull(response.data().popularProducts()).get(i).stock_status();
-                                    String hotquantity= Objects.requireNonNull(response.data().popularProducts()).get(i).quantity();
-                                    String hotdescription= Objects.requireNonNull(response.data().popularProducts()).get(i).description();
-                                    String hotweight= Objects.requireNonNull(response.data().popularProducts()).get(i).weight();
-                                    String hotlength= Objects.requireNonNull(response.data().popularProducts()).get(i).length().toString();
-                                    String hotwidth= Objects.requireNonNull(response.data().popularProducts()).get(i).width().toString();
-                                    String hotheight= Objects.requireNonNull(response.data().popularProducts()).get(i).height().toString();
-
-                                    HotNameFatches[i]=hotNames;
-                                    HotImageFatches[i]="https://ariza.style/image/"+hotImages;
-                                    HotPriceFatches[i]=hotPrice+" BDT";
-                                    HotIDFatches[i]=hotID;
-                                    HotimagesFatches[i]=hotimages;
-                                    HotmetadescriptionFatches[i]=hotmetadescription;
-                                    HotstockstatusFatches[i]=hotstock;
-                                    HotquantityFatches[i]=hotquantity;
-                                    HotdescriptionFatches[i]=hotdescription;
-                                    HotweightFatches[i]=hotweight;
-                                    HotlengthFatches[i]=hotlength;
-                                    HotwidthFatches[i]=hotwidth;
-                                    HotheightFatches[i]=hotheight;
-                                }
                                 hotlistInIt();
                             }
                         },3000);
@@ -556,9 +682,10 @@ public class MainActivity extends AppCompatActivity implements TopsellAdapter.On
                 .enqueue(new ApolloCall.Callback<BestsellerProductsQuery.Data>() {
                     @Override
                     public void onResponse(@NotNull Response<BestsellerProductsQuery.Data> response) {
-                        handler2.postDelayed(new Runnable() {
-                            @Override
+
+                        executorService.execute(new Runnable() {
                             public void run() {
+                                //do your work1 here
                                 assert response.data() != null;
                                 TopNameFatches=new String[Objects.requireNonNull(response.data().bestsellerProducts()).size()];
                                 TopImageFatches=new String[Objects.requireNonNull(response.data().bestsellerProducts()).size()];
@@ -573,11 +700,15 @@ public class MainActivity extends AppCompatActivity implements TopsellAdapter.On
                                 ToplengthFatches=new String[Objects.requireNonNull(response.data().bestsellerProducts()).size()];
                                 TopwidthFatches=new String[Objects.requireNonNull(response.data().bestsellerProducts()).size()];
                                 TopheightFatches=new String[Objects.requireNonNull(response.data().bestsellerProducts()).size()];
+                                TopsizeFatches=new String[Objects.requireNonNull(response.data().bestsellerProducts()).size()][10];
+                                TopmodelFatches=new String[Objects.requireNonNull(response.data().bestsellerProducts()).size()];
 
                                 for(int i = 0; i< Objects.requireNonNull(response.data().bestsellerProducts()).size(); i++){
                                     String topNames= Objects.requireNonNull(response.data().bestsellerProducts()).get(i).name();
                                     String topImages= Objects.requireNonNull(response.data().bestsellerProducts()).get(i).image();
-                                    String topprice= Objects.requireNonNull(response.data().bestsellerProducts()).get(i).price();
+                                    String topPrice1= Objects.requireNonNull(response.data().bestsellerProducts()).get(i).price();
+                                    topPrice1=topPrice1.substring(topPrice1.indexOf(topPrice1,0),topPrice1.indexOf('.')+3);
+                                    String topprice= topPrice1;
                                     String topID= Objects.requireNonNull(response.data().bestsellerProducts()).get(i).product_id();
                                     //String[] topimages= Objects.requireNonNull(response.data().bestsellerProducts()).get(i).images();
                                     int size= Objects.requireNonNull(Objects.requireNonNull(response.data().bestsellerProducts()).get(i).images()).size();
@@ -594,6 +725,21 @@ public class MainActivity extends AppCompatActivity implements TopsellAdapter.On
                                     String toplength= Objects.requireNonNull(response.data().bestsellerProducts()).get(i).length().toString();
                                     String topwidth= Objects.requireNonNull(response.data().bestsellerProducts()).get(i).width().toString();
                                     String topheight= Objects.requireNonNull(response.data().bestsellerProducts()).get(i).height().toString();
+                                    int hsize = 0;
+                                    try {
+                                        hsize=Objects.requireNonNull(Objects.requireNonNull(Objects.requireNonNull(response.data().bestsellerProducts()).get(i).options()).get(0).product_option_value()).size();
+                                    }catch (Exception e){
+
+                                    }
+
+
+                                    String[] topsize=new String[hsize];
+                                    for(int i1=0;i1<hsize;i1++){
+                                        topsize[i1] = Objects.requireNonNull(Objects.requireNonNull(Objects.requireNonNull(response.data().bestsellerProducts()).get(i).options()).get(0).product_option_value()).get(i1).name();
+
+                                    }
+                                    String topmodel=Objects.requireNonNull(response.data().bestsellerProducts()).get(i).model();
+
 
                                     TopNameFatches[i]=topNames;
                                     TopImageFatches[i]="https://ariza.style/image/"+topImages;
@@ -608,7 +754,17 @@ public class MainActivity extends AppCompatActivity implements TopsellAdapter.On
                                     ToplengthFatches[i]=toplength;
                                     TopwidthFatches[i]=topwidth;
                                     TopheightFatches[i]=topheight;
+                                    TopsizeFatches[i]=topsize;
+                                    TopmodelFatches[i]=topmodel;
                                 }
+                            }
+                        });
+
+
+
+                        handler2.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
                                 toplistInIt();
 
                             }
@@ -627,9 +783,12 @@ public class MainActivity extends AppCompatActivity implements TopsellAdapter.On
                 .enqueue(new ApolloCall.Callback<LatestProductQuery.Data>() {
                     @Override
                     public void onResponse(@NotNull Response<LatestProductQuery.Data> response) {
-                        handler4.postDelayed(new Runnable() {
-                            @Override
+
+                        executorService.execute(new Runnable() {
                             public void run() {
+                                //do your work1 here
+
+
                                 assert response.data() != null;
                                 latestNameFatches=new String[Objects.requireNonNull(response.data().latestProducts()).size()];
                                 latestimageFatches=new String[Objects.requireNonNull(response.data().latestProducts()).size()];
@@ -645,16 +804,21 @@ public class MainActivity extends AppCompatActivity implements TopsellAdapter.On
                                 latestlengthFatches=new String[Objects.requireNonNull(response.data().latestProducts()).size()];
                                 latestwidthFatches=new String[Objects.requireNonNull(response.data().latestProducts()).size()];
                                 latestheightFatches=new String[Objects.requireNonNull(response.data().latestProducts()).size()];
+                                latestsizeFatches=new String[Objects.requireNonNull(response.data().latestProducts()).size()][10];
+                                latestmodelFatches=new String[Objects.requireNonNull(response.data().latestProducts()).size()];
                               //  TopPriceFatches=new String[response.data().bestsellerProducts().size()];
 
                                 for(int i = 0; i< Objects.requireNonNull(response.data().latestProducts()).size(); i++){
                                     String latestNames= Objects.requireNonNull(response.data().latestProducts()).get(i).name();
+                                    Log.d("latestNameofproduct", "run: "+latestNames);
                                     String latestImages= Objects.requireNonNull(response.data().latestProducts()).get(i).image();
-                                    String latestPrice= Objects.requireNonNull(response.data().latestProducts()).get(i).price();
+                                    String latestPrice1= Objects.requireNonNull(response.data().latestProducts()).get(i).price();
+                                    latestPrice1=latestPrice1.substring(latestPrice1.indexOf(latestPrice1,0),latestPrice1.indexOf('.')+3);
+                                    String latestPrice= latestPrice1;
                                     String latestdescription= Objects.requireNonNull(response.data().latestProducts()).get(i).meta_description();
-                                    String latestID= Objects.requireNonNull(response.data().latestProducts()).get(i).meta_description();
+                                    String latestID= Objects.requireNonNull(response.data().latestProducts()).get(i).product_id();
                                     //String[] latestimages= Objects.requireNonNull(response.data().latestProducts()).get(i).images();
-                                    int size= Objects.requireNonNull(response.data().latestProducts().get(i).images()).size();
+                                    int size= Objects.requireNonNull(Objects.requireNonNull(response.data().latestProducts()).get(i).images()).size();
                                     String[] latestimages = new String[size];
                                     for (int i1=0;i1<size;i1++){
 
@@ -664,10 +828,25 @@ public class MainActivity extends AppCompatActivity implements TopsellAdapter.On
                                     String lateststock= Objects.requireNonNull(response.data().latestProducts()).get(i).stock_status();
                                     String latestquantity= Objects.requireNonNull(response.data().latestProducts()).get(i).quantity();
                                     String latestweight= Objects.requireNonNull(response.data().latestProducts()).get(i).weight();
-                                    String latestlength= Objects.requireNonNull(response.data().latestProducts()).get(i).length().toString();
-                                    String latestwidth= Objects.requireNonNull(response.data().latestProducts()).get(i).width().toString();
-                                    String latestheight= Objects.requireNonNull(response.data().latestProducts()).get(i).height().toString();
+                                    String latestlength= Objects.requireNonNull(Objects.requireNonNull(response.data().latestProducts()).get(i).length()).toString();
+                                    String latestwidth= Objects.requireNonNull(Objects.requireNonNull(response.data().latestProducts()).get(i).width()).toString();
+                                    String latestheight= Objects.requireNonNull(Objects.requireNonNull(response.data().latestProducts()).get(i).height()).toString();
                                    // String topprice= Objects.requireNonNull(response.data().bestsellerProducts()).get(i).price();
+                                    int hsize = 0;
+                                    try {
+                                        hsize=Objects.requireNonNull(Objects.requireNonNull(Objects.requireNonNull(response.data().latestProducts()).get(i).options()).get(0).product_option_value()).size();
+                                    }catch (Exception e){
+
+                                    }
+
+                                    String[] latestsize=new String[hsize];
+                                    for(int i1=0;i1<hsize;i1++){
+                                        latestsize[i1] = Objects.requireNonNull(Objects.requireNonNull(Objects.requireNonNull(response.data().latestProducts()).get(i).options()).get(0).product_option_value()).get(i1).name();
+
+                                    }
+                                    String latestmodel=Objects.requireNonNull(response.data().latestProducts()).get(i).model();
+
+
 
                                     latestNameFatches[i]=latestNames;
                                     latestimageFatches[i]="https://ariza.style/image/"+latestImages;
@@ -682,9 +861,17 @@ public class MainActivity extends AppCompatActivity implements TopsellAdapter.On
                                     latestlengthFatches[i]=latestlength;
                                     latestwidthFatches[i]=latestwidth;
                                     latestheightFatches[i]=latestheight;
+                                    latestsizeFatches[i]=latestsize;
+                                    latestmodelFatches[i]=latestmodel;
                                    // TopPriceFatches[i]=topprice+" BDT";
                                 }
-                                loadLIST();
+                                //loadLIST();
+                            }
+                        });
+
+                        handler4.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
                                 latestProductListShow();
 
 
@@ -749,9 +936,12 @@ public class MainActivity extends AppCompatActivity implements TopsellAdapter.On
                 .enqueue(new ApolloCall.Callback<LatestProductQuery.Data>() {
                     @Override
                     public void onResponse(@NotNull Response<LatestProductQuery.Data> response) {
-                        handler5.postDelayed(new Runnable() {
-                            @Override
+
+                        executorService.execute(new Runnable() {
                             public void run() {
+                                //do your work1 here
+
+
                                 assert response.data() != null;
                                 latestNameFatches=new String[response.data().latestProducts().size()];
                                 latestimageFatches=new String[response.data().latestProducts().size()];
@@ -766,13 +956,18 @@ public class MainActivity extends AppCompatActivity implements TopsellAdapter.On
                                 latestlengthFatches=new String[Objects.requireNonNull(response.data().latestProducts()).size()];
                                 latestwidthFatches=new String[Objects.requireNonNull(response.data().latestProducts()).size()];
                                 latestheightFatches=new String[Objects.requireNonNull(response.data().latestProducts()).size()];
+                                latestsizeFatches=new String[Objects.requireNonNull(response.data().latestProducts()).size()][10];
+                                latestmodelFatches=new String[Objects.requireNonNull(response.data().latestProducts()).size()];
                                 //  TopPriceFatches=new String[response.data().bestsellerProducts().size()];
 
                                 for(int i = 0; i< Objects.requireNonNull(response.data().latestProducts()).size(); i++){
                                     String latestNames= Objects.requireNonNull(response.data().latestProducts()).get(i).name();
                                     String latestImages= Objects.requireNonNull(response.data().latestProducts()).get(i).image();
-                                    String latestPrice= Objects.requireNonNull(response.data().latestProducts()).get(i).price();
+                                    String latestPrice1= Objects.requireNonNull(response.data().latestProducts()).get(i).price();
+                                    latestPrice1=latestPrice1.substring(latestPrice1.indexOf(latestPrice1,0),latestPrice1.indexOf('.')+3);
+                                    String latestPrice= latestPrice1;
                                     String latestdescription= Objects.requireNonNull(response.data().latestProducts()).get(i).meta_description();
+                                    String latestID= Objects.requireNonNull(response.data().latestProducts()).get(i).product_id();
                                   //  String[] latestimages= Objects.requireNonNull(response.data().latestProducts()).get(i).images();
 
                                     int size=response.data().latestProducts().get(i).images().size();
@@ -788,13 +983,28 @@ public class MainActivity extends AppCompatActivity implements TopsellAdapter.On
                                     String latestlength= Objects.requireNonNull(response.data().latestProducts()).get(i).length().toString();
                                     String latestwidth= Objects.requireNonNull(response.data().latestProducts()).get(i).width().toString();
                                     String latestheight= Objects.requireNonNull(response.data().latestProducts()).get(i).height().toString();
+                                    int hsize = 0;
+                                    try {
+                                        hsize=Objects.requireNonNull(Objects.requireNonNull(Objects.requireNonNull(response.data().latestProducts()).get(i).options()).get(0).product_option_value()).size();
+                                    }catch (Exception e){
+
+                                    }
+                                    String[] latestsize=new String[hsize];
+                                    for(int i1=0;i1<hsize;i1++){
+                                        latestsize[i1] = Objects.requireNonNull(Objects.requireNonNull(Objects.requireNonNull(response.data().latestProducts()).get(i).options()).get(0).product_option_value()).get(i1).name();
+
+                                    }
+                                    String latestmodel=Objects.requireNonNull(response.data().latestProducts()).get(i).model();
                                     // String topprice= Objects.requireNonNull(response.data().bestsellerProducts()).get(i).price();
+
+                                    Log.d("huddai", "run: "+latestmodel+" "+latestsize);
 
                                     latestNameFatches[i]=latestNames;
                                     latestimageFatches[i]="https://ariza.style/image/"+latestImages;
                                     latestPriceFatches[i]=latestPrice+" BDT";
                                     latestDescriptionFatches[i]=latestdescription;
                                     latestimagesFatches[i]=latestimages;
+                                    latestIDFatches[i]=latestID;
                                     latestmetadescriptionFatches[i]=latesttmetadescription;
                                     lateststockstatusFatches[i]=lateststock;
                                     latestquantityFatches[i]=latestquantity;
@@ -802,9 +1012,19 @@ public class MainActivity extends AppCompatActivity implements TopsellAdapter.On
                                     latestlengthFatches[i]=latestlength;
                                     latestwidthFatches[i]=latestwidth;
                                     latestheightFatches[i]=latestheight;
+                                    latestsizeFatches[i]=latestsize;
+                                    latestmodelFatches[i]=latestmodel;
+
                                     // TopPriceFatches[i]=topprice+" BDT";
                                 }
+
+                            }
+                        });
                                // loadLIST();
+
+                        handler5.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
                                 latestProductGridshow();
 
                             }
@@ -820,19 +1040,56 @@ public class MainActivity extends AppCompatActivity implements TopsellAdapter.On
 
     private void latestProductListShow() {
 
+//        datalist1 = new ArrayList<>();
+//
+//        for (int itemCount = 0; itemCount < latestNameFatches.length; itemCount++) {
+//
+//            latestProductsModel = new LatestProductsModel(latestimageFatches[itemCount], latestNameFatches[itemCount],latestPriceFatches[itemCount],latestDescriptionFatches[itemCount],latestIDFatches[itemCount],latestimagesFatches[itemCount],latestmetadescriptionFatches[itemCount],lateststockstatusFatches[itemCount],latestquantityFatches[itemCount],latestweightFatches[itemCount],latestlengthFatches[itemCount],latestwidthFatches[itemCount],latestheightFatches[itemCount]);
+//            datalist1.add(latestProductsModel);
+//            totallatestProductCount++;
+//
+//
+//        }
+//
+//
+//        layoutManager = new LinearLayoutManager(MainActivity.this);
+//        //layoutManager = new GridLayoutManager(MainActivity.this,2);
+//        recyclerView_latest_products.setLayoutManager(layoutManager);
+//        //newme
+//        recyclerViewAdapter = new RecyclerViewAdapter(MainActivity.this, datalist1,this);
+//        //oldme
+//        //recyclerViewAdapter = new RecyclerViewAdapter(dataList);
+//        recyclerView_latest_products.setAdapter(recyclerViewAdapter);
+//       // addScrollerListenerLIST();
 
-        layoutManager = new LinearLayoutManager(MainActivity.this);
-        //layoutManager = new GridLayoutManager(MainActivity.this,2);
+        datalist1 = new ArrayList<>();
+        for (int i = 0; i < latestNameFatches.length; i++) {
+            LatestProductsModel latestProductsModel = new LatestProductsModel(latestimageFatches[i], latestNameFatches[i],latestPriceFatches[i],latestDescriptionFatches[i],latestIDFatches[i],latestimagesFatches[i],latestmetadescriptionFatches[i],lateststockstatusFatches[i],latestquantityFatches[i],latestweightFatches[i],latestlengthFatches[i],latestwidthFatches[i],latestheightFatches[i],latestmodelFatches[i],latestsizeFatches[i]);
+
+           // LatestProductsModel latestProductsModel = new LatestProductsModel(HotImageFatches[i], HotNameFatches[i],HotPriceFatches[i],HotIDFatches[i],HotimagesFatches[i],HotmetadescriptionFatches[i],HotstockstatusFatches[i],HotquantityFatches[i],HotdescriptionFatches[i],HotweightFatches[i],HotlengthFatches[i],HotwidthFatches[i],HotheightFatches[i]);
+            datalist1.add(latestProductsModel);
+        }
+        LinearLayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
         recyclerView_latest_products.setLayoutManager(layoutManager);
-        //newme
+        recyclerView_latest_products.setItemAnimator(new DefaultItemAnimator());
+
         recyclerViewAdapter = new RecyclerViewAdapter(MainActivity.this, datalist1,this);
-        //oldme
-        //recyclerViewAdapter = new RecyclerViewAdapter(dataList);
         recyclerView_latest_products.setAdapter(recyclerViewAdapter);
-        addScrollerListenerLIST();
+
+
+
+        //recyclerViewAdapter.notifyDataSetChanged();
     }
 
     private void latestProductGridshow() {
+
+        datalist1 = new ArrayList<>();
+        for (int i = 0; i < latestNameFatches.length; i++) {
+            LatestProductsModel latestProductsModel = new LatestProductsModel(latestimageFatches[i], latestNameFatches[i],latestPriceFatches[i],latestDescriptionFatches[i],latestIDFatches[i],latestimagesFatches[i],latestmetadescriptionFatches[i],lateststockstatusFatches[i],latestquantityFatches[i],latestweightFatches[i],latestlengthFatches[i],latestwidthFatches[i],latestheightFatches[i],latestmodelFatches[i],latestsizeFatches[i]);
+
+            // LatestProductsModel latestProductsModel = new LatestProductsModel(HotImageFatches[i], HotNameFatches[i],HotPriceFatches[i],HotIDFatches[i],HotimagesFatches[i],HotmetadescriptionFatches[i],HotstockstatusFatches[i],HotquantityFatches[i],HotdescriptionFatches[i],HotweightFatches[i],HotlengthFatches[i],HotwidthFatches[i],HotheightFatches[i]);
+            datalist1.add(latestProductsModel);
+        }
 
         //loadLIST();
         //layoutManager = new LinearLayoutManager(MainActivity.this);
@@ -841,10 +1098,12 @@ public class MainActivity extends AppCompatActivity implements TopsellAdapter.On
         //oldme
         //recyclerViewAdapter = new RecyclerViewAdapter(dataList);
         //newme
-        gridRecyclerViewAdapter = new GridRecyclerViewAdapter(MainActivity.this, datalist1);
+        gridRecyclerViewAdapter = new GridRecyclerViewAdapter(MainActivity.this, datalist1,this::onNoteClicklatest);
         recyclerView_latest_products.setAdapter(gridRecyclerViewAdapter);
-        addScrollerListenerLIST();
+      //  addScrollerListenerLIST();
     }
+
+
 
 
     private void setSliderViews() {
@@ -855,15 +1114,15 @@ public class MainActivity extends AppCompatActivity implements TopsellAdapter.On
 
             switch (i) {
                 case 0:
-                    sliderView.setImageDrawable(R.drawable.ariza);
+                    sliderView.setImageDrawable(R.drawable.ban1);
                     sliderView.setDescription("Join Ariza");
                     break;
                 case 1:
-                    sliderView.setImageDrawable(R.drawable.ariza3);
+                    sliderView.setImageDrawable(R.drawable.ban2);
                     sliderView.setDescription("Explore Ariza");
                     break;
                 case 2:
-                    sliderView.setImageDrawable(R.drawable.ariza2);
+                    sliderView.setImageDrawable(R.drawable.ban3);
                     sliderView.setDescription("Share Ariza");
                     break;
             }
@@ -897,7 +1156,7 @@ public class MainActivity extends AppCompatActivity implements TopsellAdapter.On
 
 
         for(int i=0;i<TopNameFatches.length;i++){
-            TopsellModel topsellModel = new TopsellModel(TopImageFatches[i], TopNameFatches[i],TopPriceFatches[i],TopIDFatches[i],TopimagesFatches[i],TopmetadescriptionFatches[i],TopstockstatusFatches[i],TopquantityFatches[i],TopdescriptionFatches[i],TopweightFatches[i],ToplengthFatches[i],TopwidthFatches[i],TopheightFatches[i]);
+            TopsellModel topsellModel = new TopsellModel(TopImageFatches[i], TopNameFatches[i],TopPriceFatches[i],TopIDFatches[i],TopimagesFatches[i],TopmetadescriptionFatches[i],TopstockstatusFatches[i],TopquantityFatches[i],TopdescriptionFatches[i],TopweightFatches[i],ToplengthFatches[i],TopwidthFatches[i],TopheightFatches[i],TopmodelFatches[i],TopsizeFatches[i]);
             topList.add(topsellModel);
              // Toast.makeText(MainActivity.this, catagoryNamesFatches[i] +" Hello", Toast.LENGTH_SHORT).show();
         }
@@ -916,7 +1175,7 @@ public class MainActivity extends AppCompatActivity implements TopsellAdapter.On
     private void hotlistInIt() {
         hotList = new ArrayList<>();
         for (int i = 0; i < HotNameFatches.length; i++) {
-            HotsellModel hotsellModel = new HotsellModel(HotImageFatches[i], HotNameFatches[i],HotPriceFatches[i],HotIDFatches[i],HotimagesFatches[i],HotmetadescriptionFatches[i],HotstockstatusFatches[i],HotquantityFatches[i],HotdescriptionFatches[i],HotweightFatches[i],HotlengthFatches[i],HotwidthFatches[i],HotheightFatches[i]);
+            HotsellModel hotsellModel = new HotsellModel(HotImageFatches[i], HotNameFatches[i],HotPriceFatches[i],HotIDFatches[i],HotimagesFatches[i],HotmetadescriptionFatches[i],HotstockstatusFatches[i],HotquantityFatches[i],HotdescriptionFatches[i],HotweightFatches[i],HotlengthFatches[i],HotwidthFatches[i],HotheightFatches[i],HotmodelFatches[i],HotsizeFatches[i],HotoptionFatches[i]);
             hotList.add(hotsellModel);
         }
         LinearLayoutManager layoutManager = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false);
@@ -927,87 +1186,103 @@ public class MainActivity extends AppCompatActivity implements TopsellAdapter.On
         recyclerView_hot_sell.setAdapter(hotsellAdapter);
     }
 
-
-    private void addScrollerListenerLIST() {
-        //attaches scrollListener with RecyclerView
-        recyclerView_latest_products.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                if (!isLoading) {
-                    //findLastCompletelyVisibleItemPostition() returns position of last fully visible view.
-                    //It checks, fully visible view is the last one.
-                    if (layoutManager.findLastCompletelyVisibleItemPosition() == datalist1.size() - 1) {
-
-                        loadMoreLIST();
-
-                        isLoading = true;
-                    }
-                }
-            }
-        });
-    }
-
-    private void loadMoreLIST() {
-
-
-        //notify adapter using Handler.post() or RecyclerView.post()
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-
-                LatestProductsModel latestProductsModel = new LatestProductsModel("Loading", "load","default","default","default",latestdefault,"default","default","default","default","default","default","default");
-                datalist1.add(latestProductsModel);
-                recyclerViewAdapter.notifyItemInserted(datalist1.size() - 1);
-            }
-        });
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                //removes "load".
-                datalist1.remove(datalist1.size() - 1);
-                int listSize = datalist1.size();
-                recyclerViewAdapter.notifyItemRemoved(listSize);
-                //sets next limit
-
-                int nextLimit = listSize + 10;
-
-                for (int itemCount = listSize; itemCount < nextLimit; itemCount++) {
-                    //oldme
-                    //dataList.add("Item No "+ itemCount);
-                    //newme
-                    try {
-                        latestProductsModel = new LatestProductsModel(latestimageFatches[itemCount], latestNameFatches[itemCount],latestPriceFatches[itemCount],latestDescriptionFatches[itemCount],latestIDFatches[itemCount],latestimagesFatches[itemCount],latestmetadescriptionFatches[itemCount],lateststockstatusFatches[itemCount],latestquantityFatches[itemCount],latestweightFatches[itemCount],latestlengthFatches[itemCount],latestwidthFatches[itemCount],latestheightFatches[itemCount]);
-                        datalist1.add(latestProductsModel);
-                        totallatestProductCount++;
-                    } catch (ArrayIndexOutOfBoundsException e) {
-                        // e.printStackTrace();
-                        // Toast.makeText(MainActivity.this, "Data out of Bound", Toast.LENGTH_SHORT).show();
-                    }
-
-
-                }
-
-
-                recyclerViewAdapter.notifyDataSetChanged();
-                isLoading = false;
-
-            }
-        }, 3000);
-
-
-    }
-
-
-    private void loadLIST() {
-        for (int i = 0; i < 10; i++) {
-            //oldme
-            // dataList.add("Item No: "+i);
-            //newme
-            latestProductsModel = new LatestProductsModel(latestimageFatches[i], latestNameFatches[i],latestPriceFatches[i],latestDescriptionFatches[i],latestIDFatches[i],latestimagesFatches[i],latestmetadescriptionFatches[i],lateststockstatusFatches[i],latestquantityFatches[i],latestweightFatches[i],latestlengthFatches[i],latestwidthFatches[i],latestheightFatches[i]);
-            datalist1.add(latestProductsModel);
+    private void bannerInIT() {
+        bannerList=new ArrayList<>();
+        for (int i=0;i<addsBanners.length;i++){
+            BannerModel bannerModel=new BannerModel(addsBanners[i]);
+            bannerList.add(bannerModel);
         }
+        LinearLayoutManager layoutManager = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false);
+        banner_recyclerView.setLayoutManager(layoutManager);
+        banner_recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        bannerAdapter=new BannerAdapter(MainActivity.this,bannerList,R.drawable.add_banner);
+        banner_recyclerView.setAdapter(bannerAdapter);
     }
+
+
+//    private void addScrollerListenerLIST() {
+//        //attaches scrollListener with RecyclerView
+//        recyclerView_latest_products.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+//                super.onScrolled(recyclerView, dx, dy);
+//                if (!isLoading) {
+//                    //findLastCompletelyVisibleItemPostition() returns position of last fully visible view.
+//                    //It checks, fully visible view is the last one.
+//                    if (layoutManager.findLastCompletelyVisibleItemPosition() == datalist1.size() - 1) {
+//
+//                       // loadMoreLIST();
+//
+//                        isLoading = true;
+//                    }
+//                }
+//            }
+//        });
+//    }
+
+//    private void loadMoreLIST() {
+//
+//
+//        //notify adapter using Handler.post() or RecyclerView.post()
+//        handler.post(new Runnable() {
+//            @Override
+//            public void run() {
+//
+//                LatestProductsModel latestProductsModel = new LatestProductsModel("Loading", "load","default","default","default",latestdefault,"default","default","default","default","default","default","default");
+//                datalist1.add(latestProductsModel);
+//                recyclerViewAdapter.notifyItemInserted(datalist1.size() - 1);
+//            }
+//        });
+//        handler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                //removes "load".
+//                datalist1.remove(datalist1.size() - 1);
+//                int listSize = datalist1.size();
+//                recyclerViewAdapter.notifyItemRemoved(listSize);
+//                //sets next limit
+//
+//                int nextLimit = listSize + 10;
+//
+//                for (int itemCount = listSize; itemCount < nextLimit; itemCount++) {
+//                    //oldme
+//                    //dataList.add("Item No "+ itemCount);
+//                    //newme
+//                    try {
+//                        LatestProductsModel latestProductsModel = new LatestProductsModel(latestimageFatches[itemCount], latestNameFatches[itemCount],latestPriceFatches[itemCount],latestDescriptionFatches[itemCount],latestIDFatches[itemCount],latestimagesFatches[itemCount],latestmetadescriptionFatches[itemCount],lateststockstatusFatches[itemCount],latestquantityFatches[itemCount],latestweightFatches[itemCount],latestlengthFatches[itemCount],latestwidthFatches[itemCount],latestheightFatches[itemCount]);
+//                        datalist1.add(latestProductsModel);
+//                        totallatestProductCount++;
+//                    } catch (ArrayIndexOutOfBoundsException e) {
+//                        // e.printStackTrace();
+//                        // Toast.makeText(MainActivity.this, "Data out of Bound", Toast.LENGTH_SHORT).show();
+//                    }
+//
+//
+//                }
+//
+//
+//                recyclerViewAdapter.notifyDataSetChanged();
+//                isLoading = false;
+//
+//            }
+//        }, 3000);
+//
+//
+//    }
+
+
+//    private void loadLIST() {
+//
+//        for (int i = 0; i < 10; i++) {
+//            //oldme
+//            // dataList.add("Item No: "+i);
+//            //newme
+//            LatestProductsModel latestProductsModel = new LatestProductsModel(latestimageFatches[i], latestNameFatches[i],latestPriceFatches[i],latestDescriptionFatches[i],latestIDFatches[i],latestimagesFatches[i],latestmetadescriptionFatches[i],lateststockstatusFatches[i],latestquantityFatches[i],latestweightFatches[i],latestlengthFatches[i],latestwidthFatches[i],latestheightFatches[i]);
+//            datalist1.add(latestProductsModel);
+//        }
+//
+//    }
 
     @Override
     public void onNoteClick(int position) {
@@ -1025,6 +1300,8 @@ public class MainActivity extends AppCompatActivity implements TopsellAdapter.On
         intent.putExtra("width",TopwidthFatches[position]);
         intent.putExtra("height",TopheightFatches[position]);
         intent.putExtra("image",TopImageFatches[position]);
+        intent.putExtra("model",TopmodelFatches[position]);
+        intent.putExtra("size",TopsizeFatches[position]);
         intent.putExtra("counter","1");
         this.startActivity(intent);
     }
@@ -1045,6 +1322,8 @@ public class MainActivity extends AppCompatActivity implements TopsellAdapter.On
                             intent.putExtra("width",latestwidthFatches[position]);
                             intent.putExtra("height",latestheightFatches[position]);
                             intent.putExtra("image",latestimageFatches[position]);
+                            intent.putExtra("model",latestmodelFatches[position]);
+                            intent.putExtra("size",latestsizeFatches[position]);
                             intent.putExtra("counter","3");
                             this.startActivity(intent);
     }
@@ -1065,6 +1344,11 @@ public class MainActivity extends AppCompatActivity implements TopsellAdapter.On
                             intent.putExtra("width",HotwidthFatches[position]);
                             intent.putExtra("height",HotheightFatches[position]);
                             intent.putExtra("image",HotImageFatches[position]);
+                            intent.putExtra("model",HotmodelFatches[position]);
+                            intent.putExtra("size",HotsizeFatches[position]);
+                            Bundle bHot=new Bundle();
+                            bHot.putSerializable("options",HotoptionFatches[position]);
+                            intent.putExtras(bHot);
                             intent.putExtra("counter","2");
                             this.startActivity(intent);
     }

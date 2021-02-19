@@ -1,138 +1,170 @@
 package com.example.shariarspc.ariza_app.HotSell;
 
+import java.util.HashMap;
+
 public class HotsellModel {
-    String image;
-    String product_name;
-    String price;
-    String productID;
-    String[] images;
-    String metadescription;
-    String stockstatus;
-    String quantity;
-    String description;
-    String weight;
-    String length;
-    String width;
-    String height;
+    String imagehot;
+    String product_namehot;
+    String pricehot;
+    String productIDhot;
+    String[] imageshot;
+    String metadescriptionhot;
+    String stockstatushot;
+    String quantityhot;
+    String descriptionhot;
+    String weighthot;
+    String lengthhot;
+    String widthhot;
+    String heighthot;
+    String modelhot;
+    String sizehot[];
+    HashMap optionMap;
 
 
-    public HotsellModel(String image, String product_name, String price, String productID, String[] images, String metadescription, String stockstatus, String quantity, String description, String weight, String length, String width, String height) {
-        this.image = image;
-        this.product_name = product_name;
-        this.price = price;
-        this.productID = productID;
-        this.images = images;
-        this.metadescription = metadescription;
-        this.stockstatus = stockstatus;
-        this.quantity = quantity;
-        this.description = description;
-        this.weight = weight;
-        this.length = length;
-        this.width = width;
-        this.height = height;
+    public HotsellModel(String imagehot, String product_namehot, String pricehot, String productIDhot, String[] imageshot, String metadescriptionhot, String stockstatushot, String quantityhot, String descriptionhot, String weighthot, String lengthhot, String widthhot, String heighthot, String modelhot, String[] sizehot, HashMap optionMap) {
+        this.imagehot = imagehot;
+        this.product_namehot = product_namehot;
+        this.pricehot = pricehot;
+        this.productIDhot = productIDhot;
+        this.imageshot = imageshot;
+        this.metadescriptionhot = metadescriptionhot;
+        this.stockstatushot = stockstatushot;
+        this.quantityhot = quantityhot;
+        this.descriptionhot = descriptionhot;
+        this.weighthot = weighthot;
+        this.lengthhot = lengthhot;
+        this.widthhot = widthhot;
+        this.heighthot = heighthot;
+        this.modelhot=modelhot;
+        this.sizehot=sizehot;
+        this.optionMap=optionMap;
     }
 
-    public String[] getImages() {
-        return images;
+    public HashMap getOptionMap() {
+        return optionMap;
     }
 
-    public void setImages(String[] images) {
-        this.images = images;
+    public void setOptionMap(HashMap optionMap) {
+        this.optionMap = optionMap;
     }
 
-    public String getMetadescription() {
-        return metadescription;
+    public String getModelhot() {
+        return modelhot;
     }
 
-    public void setMetadescription(String metadescription) {
-        this.metadescription = metadescription;
+    public void setModelhot(String modelhot) {
+        this.modelhot = modelhot;
     }
 
-    public String getStockstatus() {
-        return stockstatus;
+    public String[] getSizehot() {
+        return sizehot;
     }
 
-    public void setStockstatus(String stockstatus) {
-        this.stockstatus = stockstatus;
+    public void setSizehot(String[] sizehot) {
+        this.sizehot = sizehot;
     }
 
-    public String getQuantity() {
-        return quantity;
+    public String getImagehot() {
+        return imagehot;
     }
 
-    public void setQuantity(String quantity) {
-        this.quantity = quantity;
+    public void setImagehot(String imagehot) {
+        this.imagehot = imagehot;
     }
 
-    public String getDescription() {
-        return description;
+    public String getProduct_namehot() {
+        return product_namehot;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setProduct_namehot(String product_namehot) {
+        this.product_namehot = product_namehot;
     }
 
-    public String getWeight() {
-        return weight;
+    public String getPricehot() {
+        return pricehot;
     }
 
-    public void setWeight(String weight) {
-        this.weight = weight;
+    public void setPricehot(String pricehot) {
+        this.pricehot = pricehot;
     }
 
-    public String getLength() {
-        return length;
+    public String getProductIDhot() {
+        return productIDhot;
     }
 
-    public void setLength(String length) {
-        this.length = length;
+    public void setProductIDhot(String productIDhot) {
+        this.productIDhot = productIDhot;
     }
 
-    public String getWidth() {
-        return width;
+    public String[] getImageshot() {
+        return imageshot;
     }
 
-    public void setWidth(String width) {
-        this.width = width;
+    public void setImageshot(String[] imageshot) {
+        this.imageshot = imageshot;
     }
 
-    public String getHeight() {
-        return height;
+    public String getMetadescriptionhot() {
+        return metadescriptionhot;
     }
 
-    public void setHeight(String height) {
-        this.height = height;
+    public void setMetadescriptionhot(String metadescriptionhot) {
+        this.metadescriptionhot = metadescriptionhot;
     }
 
-    public String getProductID() {
-        return productID;
+    public String getStockstatushot() {
+        return stockstatushot;
     }
 
-    public void setProductID(String productID) {
-        this.productID = productID;
+    public void setStockstatushot(String stockstatushot) {
+        this.stockstatushot = stockstatushot;
     }
 
-    public String getPrice() {
-        return price;
+    public String getQuantityhot() {
+        return quantityhot;
     }
 
-    public void setPrice(String price) {
-        this.price = price;
+    public void setQuantityhot(String quantityhot) {
+        this.quantityhot = quantityhot;
     }
 
-    public String getImage() {
-        return image;
+    public String getDescriptionhot() {
+        return descriptionhot;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setDescriptionhot(String descriptionhot) {
+        this.descriptionhot = descriptionhot;
     }
 
-    public String getProduct_name() {
-        return product_name;
+    public String getWeighthot() {
+        return weighthot;
     }
 
-    public void setProduct_name(String product_name) {
-        this.product_name = product_name;
+    public void setWeighthot(String weighthot) {
+        this.weighthot = weighthot;
+    }
+
+    public String getLengthhot() {
+        return lengthhot;
+    }
+
+    public void setLengthhot(String lengthhot) {
+        this.lengthhot = lengthhot;
+    }
+
+    public String getWidthhot() {
+        return widthhot;
+    }
+
+    public void setWidthhot(String widthhot) {
+        this.widthhot = widthhot;
+    }
+
+    public String getHeighthot() {
+        return heighthot;
+    }
+
+    public void setHeighthot(String heighthot) {
+        this.heighthot = heighthot;
     }
 }

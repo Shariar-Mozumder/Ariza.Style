@@ -15,6 +15,7 @@ import android.os.Handler;
 import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.shariarspc.ariza_app.CheckOut.CheckOut;
@@ -39,6 +40,8 @@ public class CartProductShow extends AppCompatActivity {
     int quantity1,quantity;
     public float totalCartprice=0,price,totalPrice;
 
+    ImageButton backBtn;
+
     Handler handler=new Handler();
 
     @Override
@@ -49,6 +52,14 @@ public class CartProductShow extends AppCompatActivity {
         recyclerViewCart=findViewById(R.id.cartproductList);
         total=findViewById(R.id.totalAmountID);
         checkOut=findViewById(R.id.checkoutID);
+        backBtn=findViewById(R.id.backbuttonID);
+
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CartProductShow.this.finish();
+            }
+        });
 
 
 
@@ -88,7 +99,7 @@ public class CartProductShow extends AppCompatActivity {
 
     public void recyclerviewInIt(){
 
-        handler.postDelayed(new Runnable() {
+        handler.post(new Runnable() {
             @Override
             public void run() {
 
@@ -108,11 +119,11 @@ public class CartProductShow extends AppCompatActivity {
                     productList.add(cartProductModel);
                     name=cursor.getString(0);
                     productID=cursor.getString(1);
-                    quantity1=cursor.getInt(4);
+                    //quantity=cursor.getInt(4);
 
 
 
-                    CheckOutProductModelFromCart checkOutProductModelFromCart=new CheckOutProductModelFromCart(productID,name,price,totalPrice,quantity1);
+                    CheckOutProductModelFromCart checkOutProductModelFromCart=new CheckOutProductModelFromCart(productID,name,price,totalPrice,quantity);
                     chechkOutProductsList.add(checkOutProductModelFromCart);
 
                 }
@@ -140,7 +151,7 @@ public class CartProductShow extends AppCompatActivity {
 
                 total.setText("Total: "+totalCartprice+" BDT");
             }
-        },3000);
+        });
 
     }
 }

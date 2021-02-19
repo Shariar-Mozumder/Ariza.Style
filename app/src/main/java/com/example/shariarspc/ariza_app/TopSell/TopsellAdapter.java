@@ -61,26 +61,26 @@ public class TopsellAdapter extends RecyclerView.Adapter<TopsellAdapter.MyViewHo
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
-        Picasso.get().load(topList.get(position).getImage()).into(holder.imageView);
+        Picasso.get().load(topList.get(position).getImagetop()).into(holder.imageView);
 
        // holder.imageView.setImageResource(topList.get(position).getImage());
        // holder.imageView.setImageBitmap(MainActivity.getBitmapFromURL(topList.get(position).getImage()));
 
-        holder.textView.setText(topList.get(position).getProduct_name());
-        holder.priceText.setText(topList.get(position).getPrice());
-        productID=topList.get(position).productID;
-        images=topList.get(position).getImages();
-        metadescription=topList.get(position).getMetadescription();
-        price=topList.get(position).getPrice();
-        name=topList.get(position).getProduct_name();
-        stockstatus=topList.get(position).getStockstatus();
-        quantity=topList.get(position).getQuantity();
-        description=topList.get(position).getDescription();
-        weight=topList.get(position).getWeight();
-        length=topList.get(position).getLength();
-        width=topList.get(position).getWidth();
-        height=topList.get(position).getHeight();
-        image=topList.get(position).getImage();
+        holder.textView.setText(topList.get(position).getProduct_nametop());
+        holder.priceText.setText(topList.get(position).getPricetop());
+        productID=topList.get(position).productIDtop;
+        images=topList.get(position).getImagestop();
+        metadescription=topList.get(position).getMetadescriptiontop();
+        price=topList.get(position).getPricetop();
+        name=topList.get(position).getProduct_nametop();
+        stockstatus=topList.get(position).getStockstatustop();
+        quantity=topList.get(position).getQuantitytop();
+        description=topList.get(position).getDescriptiontop();
+        weight=topList.get(position).getWeighttop();
+        length=topList.get(position).getLengthtop();
+        width=topList.get(position).getWidthtop();
+        height=topList.get(position).getHeighttop();
+        image=topList.get(position).getImagetop();
     }
 
     @Override

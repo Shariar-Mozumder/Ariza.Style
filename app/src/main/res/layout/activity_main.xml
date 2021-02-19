@@ -78,12 +78,13 @@
             android:layout_marginBottom="2dp"
             android:id="@+id/catagorygrid_id"
             android:layout_width="match_parent"
-            android:layout_height="580dp"
-            android:horizontalSpacing="10dp"
-            android:verticalSpacing="10dp"
+            android:layout_height="480dp"
+            android:horizontalSpacing="5dp"
+            android:verticalSpacing="5dp"
             android:listSelector="#666464"
             android:layout_below="@+id/catagorytext"
-            android:numColumns="3" />
+            android:numColumns="3"
+            android:gravity="center"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -101,19 +102,32 @@
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginLeft="8dp"
             android:layout_below="@+id/topselltext"
             android:id="@+id/top_sell_recyclerView"/>
 
-        <ImageView
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:id="@+id/add_banner"
-            android:src="@drawable/add_banner"
-            android:layout_margin="5dp"
+            android:layout_height="wrap_content"
+            android:text="Deals"
+            android:textSize="15dp"
+            android:textColor="#111111"
+            android:textStyle="bold"
+            android:id="@+id/dealstext"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="3dp"
             android:layout_below="@+id/top_sell_recyclerView"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_below="@+id/dealstext"
+            android:id="@+id/banner_recyclerView"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -125,14 +139,13 @@
             android:id="@+id/hotselltext"
             android:layout_marginStart="10dp"
             android:layout_marginTop="3dp"
-            android:layout_below="@+id/add_banner"/>
+            android:layout_below="@+id/banner_recyclerView"/>
 
 
 
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:layout_marginRight="5dp"
             android:layout_marginLeft="5dp"
             android:id="@+id/hot_sell_recyclerView"

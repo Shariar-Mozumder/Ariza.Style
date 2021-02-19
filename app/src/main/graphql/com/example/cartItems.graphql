@@ -1,5 +1,5 @@
 mutation AddToCartItems($input:CartItemInput!){
     addItemToCart(input:$input){
-        items{product_id,name,quantity,price,cart_id,total},total
+        total,subtotal,has_shipping,items{cart_id,product_id,name,option{option_id,name,value,product_option_id}}
     }
 }

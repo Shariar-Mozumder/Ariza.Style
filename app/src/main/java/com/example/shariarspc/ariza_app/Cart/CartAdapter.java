@@ -63,7 +63,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
 
         Picasso.get().load(producyDataList.get(position).getImageCart()).into(holder.productimage);
 
-        Log.d("quantity", "onBindViewHolder: "+producyDataList.get(position).getImageCart());
+        //Log.d("quantity", "onBindViewHolder: "+producyDataList.get(position).getImageCart());
 
         holder.nameTV.setText(producyDataList.get(position).getNameCart());
         holder.priceTV.setText(producyDataList.get(position).getPriceCart());
@@ -94,11 +94,12 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
             @Override
             public void onValueChange(ElegantNumberButton view, int oldValue, int newValue) {
                 String p=producyDataList.get (position).getPriceCart().substring(producyDataList.get(position).getPriceCart().indexOf(':')+1,producyDataList.get(position).getPriceCart().indexOf("B"));
-                quantity=newValue;
+                //quantity=newValue;
                 MyDatabaseHelper myDatabaseHelper=new MyDatabaseHelper(context);
-                int Q=myDatabaseHelper.insertQuantity(productID,newValue);
+                quantity=myDatabaseHelper.insertQuantity(productID,newValue);
 
-                Log.d("Quantity", "onValueChange: "+Q);
+                Log.d("Quantity123", "onValueChange: " +
+                        " ID-"+productID);
 
 
 
@@ -140,6 +141,12 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
                // finaly=(totally+subTotal);
                // Total=Total+finaly;
 
+                float price=Float.parseFloat(p1)*quantity;
+                Intent intent=new Intent("quantity-totalprice");
+                intent.putExtra("quantity",quantity);
+                intent.putExtra("totalprice",price);
+                LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+
 
             }
         });
@@ -151,22 +158,38 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
             @Override
             public void onClick(View v) {
                 MyDatabaseHelper myDatabaseHelper=new MyDatabaseHelper(context);
-                myDatabaseHelper.delete(productID);
+
+                try {
+                    myDatabaseHelper.delete(producyDataList.get(position).getIdCart());
+                }catch (Exception e){
+
+                }
+
+                producyDataList.remove(position);
+                notifyItemRemoved(position);
+                notifyItemRangeChanged(position,producyDataList.size());
+                notifyDataSetChanged();
+
                // Total=Total-finaly;
                // tvTotal.setText("Total: "+Total+" BDT");
-                String p=producyDataList.get (position).getPriceCart().substring(producyDataList.get(position).getPriceCart().indexOf(':')+1,producyDataList.get(position).getPriceCart().indexOf("B"));
-                String number=holder.elegantNumberButton.getNumber();
-                float del=Float.parseFloat(p)*Float.parseFloat(number);
-                Log.d("numberrrr", "onClick: "+number);
 
-                Total=Total-del;
+                try {
+                    String p=producyDataList.get (position).getPriceCart().substring(producyDataList.get(position).getPriceCart().indexOf(':')+1,producyDataList.get(position).getPriceCart().indexOf("B"));
+                    String number=holder.elegantNumberButton.getNumber();
+                    float del=Float.parseFloat(p)*Float.parseFloat(number);
+                    Log.d("numberrrr", "onClick: "+number);
 
-                    producyDataList.remove(position);
-                    notifyItemRemoved(position);
-                    notifyItemRangeChanged(position,producyDataList.size());
-                    notifyDataSetChanged();
+                    Total=Total-del;
 
-                tvTotal.setText("Total: "+Total+" BDT");
+
+
+                    tvTotal.setText("Total: "+Total+" BDT");
+                }catch (Exception e){
+
+                }
+
+                return;
+
 
 
 
@@ -191,12 +214,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
 
 
 
-        int quantity=ne;
-        float price=Float.parseFloat(p1)*ne;
-        Intent intent=new Intent("quantity-totalprice");
-        intent.putExtra("quantity",quantity);
-        intent.putExtra("totalprice",price);
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+       // int quantity=ne;
+
 
     }
 

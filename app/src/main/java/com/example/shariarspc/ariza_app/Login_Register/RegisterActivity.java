@@ -98,6 +98,14 @@ public class RegisterActivity extends AppCompatActivity{
             }
         });
 
+        loginText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(RegisterActivity.this,LoginActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 
     private void userResister() {

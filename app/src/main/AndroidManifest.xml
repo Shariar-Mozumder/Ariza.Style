@@ -16,7 +16,8 @@
         android:usesCleartextTraffic="true">
         <activity android:name=".Login_Register.LoginActivity"></activity>
         <activity android:name=".Login_Register.RegisterActivity" />
-        <activity android:name=".CheckOut.CheckOut" />
+        <activity android:name=".CheckOut.CheckOut"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".Cart.CartProductShow"
             android:theme="@style/AppTheme.NoActionBar" />

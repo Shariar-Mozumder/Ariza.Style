@@ -12,7 +12,10 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,12 +33,15 @@ import com.example.LatestCatalogQuery;
 import com.example.MensQuery;
 import com.example.WomensQuery;
 import com.example.shariarspc.ariza_app.IndividualProductDetails.ProductDetailsActivity;
+import com.example.shariarspc.ariza_app.MainActivity;
 import com.example.shariarspc.ariza_app.R;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Catagory_Product_List extends AppCompatActivity implements RecyclerViewAdapterForCatagoryProduct.OnNoteListenerCatagory {
 
@@ -44,8 +50,11 @@ public class Catagory_Product_List extends AppCompatActivity implements Recycler
     Handler handler8=new Handler();
     ProgressDialog progressDialog;
     TextView catagoryname,noProduct;
+    ImageButton backButton;
 
     String catagoryID,catagoryName;
+
+    ExecutorService executorService = Executors.newFixedThreadPool(32); // you can number of threads you want
 
     RecyclerView catagoryProductRecyclerView;
     CatagoryWiseProductsModel catagoryWiseProductsModel;
@@ -69,8 +78,10 @@ public class Catagory_Product_List extends AppCompatActivity implements Recycler
     @Nullable static String[] catagoryProductslengthFatches;
     @Nullable static String[] catagoryProductswidthFatches;
     @Nullable static String[] catagoryProductsheightFatches;
+    @Nullable static String[][] catagoryProductssizeFatches;
+    @Nullable static String[] catagoryProductsmodelFatches;
 
-    ArrayList<CatagoryWiseProductsModel> cat_datalist=new ArrayList<>();
+    ArrayList<CatagoryWiseProductsModel> cat_datalist;
 
     LinearLayoutManager linearLayoutManager;
     GridLayoutManager gridLayoutManager;
@@ -82,6 +93,7 @@ public class Catagory_Product_List extends AppCompatActivity implements Recycler
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_catagory__product__list);
         catagoryname=findViewById(R.id.catagory_name);
+        backButton=findViewById(R.id.backbuttonID);
        // noProduct=findViewById(R.id.noProductFound);
 
         apolloClient = ApolloClient.builder()
@@ -96,6 +108,14 @@ public class Catagory_Product_List extends AppCompatActivity implements Recycler
         catagoryName=getIntent().getStringExtra("catagoryNAME");
        // Toast.makeText(this, catagoryID, Toast.LENGTH_SHORT).show();
         catagoryname.setText(catagoryName);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                Intent intent=new Intent(Catagory_Product_List.this, MainActivity.class);
+//                startActivity(intent);
+                Catagory_Product_List.this.finish();
+            }
+        });
 
         listshows();
 
@@ -106,9 +126,10 @@ public class Catagory_Product_List extends AppCompatActivity implements Recycler
             apolloClient.query(new BrandCatagoryQuery()).enqueue(new ApolloCall.Callback<BrandCatagoryQuery.Data>() {
                 @Override
                 public void onResponse(@NotNull Response<BrandCatagoryQuery.Data> response) {
-                    handler7.postDelayed(new Runnable() {
-                        @Override
+
+                    executorService.execute(new Runnable() {
                         public void run() {
+
                             //assert response.data() != null;
                             catagoryProductsNameFatches = new String[response.data().category().products().size()];
                             catagoryProductsimageFatches = new String[response.data().category().products().size()];
@@ -124,11 +145,15 @@ public class Catagory_Product_List extends AppCompatActivity implements Recycler
                             catagoryProductslengthFatches = new String[response.data().category().products().size()];
                             catagoryProductswidthFatches = new String[response.data().category().products().size()];
                             catagoryProductsheightFatches = new String[response.data().category().products().size()];
+                            catagoryProductssizeFatches = new String[response.data().category().products().size()][10];
+                            catagoryProductsmodelFatches = new String[response.data().category().products().size()];
 
                             for (int i = 0; i < response.data().category().products().size(); i++) {
                                 String name = response.data().category().products().get(i).name();
                                 String image = response.data().category().products().get(i).image();
-                                String price = response.data().category().products().get(i).price();
+                                String Price1= response.data().category().products().get(i).price();
+                                Price1=Price1.substring(Price1.indexOf(Price1,0),Price1.indexOf('.')+3);
+                                String price =Price1;
                                 String description = response.data().category().products().get(i).description();
                                 String id = response.data().category().products().get(i).product_id();
                                 int size = response.data().category().products().get(i).images().size();
@@ -143,11 +168,25 @@ public class Catagory_Product_List extends AppCompatActivity implements Recycler
                                 String length = response.data().category().products().get(i).length().toString();
                                 String width = response.data().category().products().get(i).width().toString();
                                 String height = response.data().category().products().get(i).height().toString();
+                                String model = response.data().category().products().get(i).model();
+                                Log.d("mothhhel", "run: "+model);
+                                int hsize=0;
+                                try {
+                                    hsize=Objects.requireNonNull(Objects.requireNonNull(Objects.requireNonNull(response.data().category().products()).get(i).options()).get(0).product_option_value()).size();
+                                }catch (Exception e){
+
+                                }
+
+                                String[] sizees=new String[hsize];
+                                for(int i1=0;i1<hsize;i1++){
+                                    sizees[i1] = Objects.requireNonNull(Objects.requireNonNull(Objects.requireNonNull(response.data().category().products()).get(i).options()).get(0).product_option_value()).get(i1).name();
+
+                                }
 
 
                                 catagoryProductsNameFatches[i] = name;
                                 catagoryProductsimageFatches[i] = "https://ariza.style/image/"+image;
-                                catagoryProductsPriceFatches[i] = price;
+                                catagoryProductsPriceFatches[i] = price+" BDT";
                                 catagoryProductsDescriptionFatches[i] = description;
                                 catagoryProductsIDFatches[i] = id;
                                 catagoryProductsimagesFatches[i] = images;
@@ -158,9 +197,16 @@ public class Catagory_Product_List extends AppCompatActivity implements Recycler
                                 catagoryProductslengthFatches[i] = length;
                                 catagoryProductswidthFatches[i] = width;
                                 catagoryProductsheightFatches[i] = height;
+                                catagoryProductsmodelFatches[i] = model;
+                                catagoryProductssizeFatches[i] = sizees;
                             }
+                        }
+                    });
 
-                            loadlist();
+                            handler7.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                            //loadlist();
                             productlistshow();
                         }
                     }, 1500);
@@ -175,9 +221,10 @@ public class Catagory_Product_List extends AppCompatActivity implements Recycler
             apolloClient.query(new ComingSoonCatagoryQuery()).enqueue(new ApolloCall.Callback<ComingSoonCatagoryQuery.Data>() {
                 @Override
                 public void onResponse(@NotNull Response<ComingSoonCatagoryQuery.Data> response) {
-                    handler7.postDelayed(new Runnable() {
-                        @Override
+
+                    executorService.execute(new Runnable() {
                         public void run() {
+
                            // assert response.data() != null;
                             catagoryProductsNameFatches = new String[response.data().category().products().size()];
                             catagoryProductsimageFatches = new String[response.data().category().products().size()];
@@ -193,11 +240,15 @@ public class Catagory_Product_List extends AppCompatActivity implements Recycler
                             catagoryProductslengthFatches = new String[response.data().category().products().size()];
                             catagoryProductswidthFatches = new String[response.data().category().products().size()];
                             catagoryProductsheightFatches = new String[response.data().category().products().size()];
+                            catagoryProductssizeFatches = new String[response.data().category().products().size()][10];
+                            catagoryProductsmodelFatches = new String[response.data().category().products().size()];
 
                             for (int i = 0; i < response.data().category().products().size(); i++) {
                                 String name = response.data().category().products().get(i).name();
                                 String image = response.data().category().products().get(i).image();
-                                String price = response.data().category().products().get(i).price();
+                                String Price1= response.data().category().products().get(i).price();
+                                Price1=Price1.substring(Price1.indexOf(Price1,0),Price1.indexOf('.')+3);
+                                String price =Price1;
                                 String description = response.data().category().products().get(i).description();
                                 String id = response.data().category().products().get(i).product_id();
                                 int size = response.data().category().products().get(i).images().size();
@@ -212,11 +263,24 @@ public class Catagory_Product_List extends AppCompatActivity implements Recycler
                                 String length = response.data().category().products().get(i).length().toString();
                                 String width = response.data().category().products().get(i).width().toString();
                                 String height = response.data().category().products().get(i).height().toString();
+                                String model = response.data().category().products().get(i).model();
+                                Log.d("mothhhel", "run: "+model);
+                                int hsize=0;
+                                try {
+                                    hsize=Objects.requireNonNull(Objects.requireNonNull(Objects.requireNonNull(response.data().category().products()).get(i).options()).get(0).product_option_value()).size();
+                                }catch (Exception e){
 
+                                }
+
+                                String[] sizees=new String[hsize];
+                                for(int i1=0;i1<hsize;i1++){
+                                    sizees[i1] = Objects.requireNonNull(Objects.requireNonNull(Objects.requireNonNull(response.data().category().products()).get(i).options()).get(0).product_option_value()).get(i1).name();
+
+                                }
 
                                 catagoryProductsNameFatches[i] = name;
                                 catagoryProductsimageFatches[i] = "https://ariza.style/image/"+image;
-                                catagoryProductsPriceFatches[i] = price;
+                                catagoryProductsPriceFatches[i] = price+" BDT";
                                 catagoryProductsDescriptionFatches[i] = description;
                                 catagoryProductsIDFatches[i] = id;
                                 catagoryProductsimagesFatches[i] = images;
@@ -227,9 +291,18 @@ public class Catagory_Product_List extends AppCompatActivity implements Recycler
                                 catagoryProductslengthFatches[i] = length;
                                 catagoryProductswidthFatches[i] = width;
                                 catagoryProductsheightFatches[i] = height;
+                                catagoryProductsmodelFatches[i] = model;
+                                catagoryProductssizeFatches[i] = sizees;
                             }
 
-                            loadlist();
+                        }
+                    });
+
+            handler7.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+
+                            //loadlist();
                             productlistshow();
                         }
                     }, 1500);
@@ -245,9 +318,10 @@ public class Catagory_Product_List extends AppCompatActivity implements Recycler
             apolloClient.query(new FootwareCatagoryQuery()).enqueue(new ApolloCall.Callback<FootwareCatagoryQuery.Data>() {
                 @Override
                 public void onResponse(@NotNull Response<FootwareCatagoryQuery.Data> response) {
-                    handler7.postDelayed(new Runnable() {
-                        @Override
+
+                    executorService.execute(new Runnable() {
                         public void run() {
+
                             //assert response.data() != null;
                             catagoryProductsNameFatches = new String[response.data().category().products().size()];
                             catagoryProductsimageFatches = new String[response.data().category().products().size()];
@@ -263,11 +337,15 @@ public class Catagory_Product_List extends AppCompatActivity implements Recycler
                             catagoryProductslengthFatches = new String[response.data().category().products().size()];
                             catagoryProductswidthFatches = new String[response.data().category().products().size()];
                             catagoryProductsheightFatches = new String[response.data().category().products().size()];
+                            catagoryProductssizeFatches = new String[response.data().category().products().size()][10];
+                            catagoryProductsmodelFatches = new String[response.data().category().products().size()];
 
                             for (int i = 0; i < response.data().category().products().size(); i++) {
                                 String name = response.data().category().products().get(i).name();
                                 String image = response.data().category().products().get(i).image();
-                                String price = response.data().category().products().get(i).price();
+                                String Price1= response.data().category().products().get(i).price();
+                                Price1=Price1.substring(Price1.indexOf(Price1,0),Price1.indexOf('.')+3);
+                                String price =Price1;
                                 String description = response.data().category().products().get(i).description();
                                 String id = response.data().category().products().get(i).product_id();
                                 int size = response.data().category().products().get(i).images().size();
@@ -282,11 +360,24 @@ public class Catagory_Product_List extends AppCompatActivity implements Recycler
                                 String length = response.data().category().products().get(i).length().toString();
                                 String width = response.data().category().products().get(i).width().toString();
                                 String height = response.data().category().products().get(i).height().toString();
+                                String model = response.data().category().products().get(i).model();
+                                Log.d("mothhhel", "run: "+model);
+                                int hsize=0;
+                                try {
+                                    hsize=Objects.requireNonNull(Objects.requireNonNull(Objects.requireNonNull(response.data().category().products()).get(i).options()).get(0).product_option_value()).size();
+                                }catch (Exception e){
 
+                                }
+
+                                String[] sizees=new String[hsize];
+                                for(int i1=0;i1<hsize;i1++){
+                                    sizees[i1] = Objects.requireNonNull(Objects.requireNonNull(Objects.requireNonNull(response.data().category().products()).get(i).options()).get(0).product_option_value()).get(i1).name();
+
+                                }
 
                                 catagoryProductsNameFatches[i] = name;
                                 catagoryProductsimageFatches[i] = "https://ariza.style/image/"+image;
-                                catagoryProductsPriceFatches[i] = price;
+                                catagoryProductsPriceFatches[i] = price+" BDT";
                                 catagoryProductsDescriptionFatches[i] = description;
                                 catagoryProductsIDFatches[i] = id;
                                 catagoryProductsimagesFatches[i] = images;
@@ -297,9 +388,18 @@ public class Catagory_Product_List extends AppCompatActivity implements Recycler
                                 catagoryProductslengthFatches[i] = length;
                                 catagoryProductswidthFatches[i] = width;
                                 catagoryProductsheightFatches[i] = height;
+                                catagoryProductsmodelFatches[i] = model;
+                                catagoryProductssizeFatches[i] = sizees;
                             }
 
-                            loadlist();
+                        }
+                    });
+
+                            handler7.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+
+                            //loadlist();
                             productlistshow();
                         }
                     }, 1500);
@@ -314,9 +414,10 @@ public class Catagory_Product_List extends AppCompatActivity implements Recycler
             apolloClient.query(new HomeLivingQuery()).enqueue(new ApolloCall.Callback<HomeLivingQuery.Data>() {
                 @Override
                 public void onResponse(@NotNull Response<HomeLivingQuery.Data> response) {
-                    handler7.postDelayed(new Runnable() {
-                        @Override
+
+                    executorService.execute(new Runnable() {
                         public void run() {
+
                            // assert response.data() != null;
                             catagoryProductsNameFatches = new String[response.data().category().products().size()];
                             catagoryProductsimageFatches = new String[response.data().category().products().size()];
@@ -332,11 +433,15 @@ public class Catagory_Product_List extends AppCompatActivity implements Recycler
                             catagoryProductslengthFatches = new String[response.data().category().products().size()];
                             catagoryProductswidthFatches = new String[response.data().category().products().size()];
                             catagoryProductsheightFatches = new String[response.data().category().products().size()];
+                            catagoryProductssizeFatches = new String[response.data().category().products().size()][10];
+                            catagoryProductsmodelFatches = new String[response.data().category().products().size()];
 
                             for (int i = 0; i < response.data().category().products().size(); i++) {
                                 String name = response.data().category().products().get(i).name();
                                 String image = response.data().category().products().get(i).image();
-                                String price = response.data().category().products().get(i).price();
+                                String Price1= response.data().category().products().get(i).price();
+                                Price1=Price1.substring(Price1.indexOf(Price1,0),Price1.indexOf('.')+3);
+                                String price =Price1;
                                 String description = response.data().category().products().get(i).description();
                                 String id = response.data().category().products().get(i).product_id();
                                 int size = response.data().category().products().get(i).images().size();
@@ -351,11 +456,24 @@ public class Catagory_Product_List extends AppCompatActivity implements Recycler
                                 String length = response.data().category().products().get(i).length().toString();
                                 String width = response.data().category().products().get(i).width().toString();
                                 String height = response.data().category().products().get(i).height().toString();
+                                String model = response.data().category().products().get(i).model();
+                                Log.d("mothhhel", "run: "+model);
+                                int hsize=0;
+                                try {
+                                    hsize=Objects.requireNonNull(Objects.requireNonNull(Objects.requireNonNull(response.data().category().products()).get(i).options()).get(0).product_option_value()).size();
+                                }catch (Exception e){
 
+                                }
+
+                                String[] sizees=new String[hsize];
+                                for(int i1=0;i1<hsize;i1++){
+                                    sizees[i1] = Objects.requireNonNull(Objects.requireNonNull(Objects.requireNonNull(response.data().category().products()).get(i).options()).get(0).product_option_value()).get(i1).name();
+
+                                }
 
                                 catagoryProductsNameFatches[i] = name;
                                 catagoryProductsimageFatches[i] = "https://ariza.style/image/"+image;
-                                catagoryProductsPriceFatches[i] = price;
+                                catagoryProductsPriceFatches[i] = price+" BDT";
                                 catagoryProductsDescriptionFatches[i] = description;
                                 catagoryProductsIDFatches[i] = id;
                                 catagoryProductsimagesFatches[i] = images;
@@ -366,9 +484,18 @@ public class Catagory_Product_List extends AppCompatActivity implements Recycler
                                 catagoryProductslengthFatches[i] = length;
                                 catagoryProductswidthFatches[i] = width;
                                 catagoryProductsheightFatches[i] = height;
+                                catagoryProductsmodelFatches[i] = model;
+                                catagoryProductssizeFatches[i] = sizees;
                             }
 
-                            loadlist();
+                        }
+                    });
+
+            handler7.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+
+                            //loadlist();
                             productlistshow();
                         }
                     }, 1500);
@@ -383,9 +510,9 @@ public class Catagory_Product_List extends AppCompatActivity implements Recycler
             apolloClient.query(new JamdaniQuery()).enqueue(new ApolloCall.Callback<JamdaniQuery.Data>() {
                 @Override
                 public void onResponse(@NotNull Response<JamdaniQuery.Data> response) {
-                    handler7.postDelayed(new Runnable() {
-                        @Override
+                    executorService.execute(new Runnable() {
                         public void run() {
+
                             //assert response.data() != null;
                             catagoryProductsNameFatches = new String[response.data().category().products().size()];
                             catagoryProductsimageFatches = new String[response.data().category().products().size()];
@@ -401,11 +528,15 @@ public class Catagory_Product_List extends AppCompatActivity implements Recycler
                             catagoryProductslengthFatches = new String[response.data().category().products().size()];
                             catagoryProductswidthFatches = new String[response.data().category().products().size()];
                             catagoryProductsheightFatches = new String[response.data().category().products().size()];
+                            catagoryProductssizeFatches = new String[response.data().category().products().size()][10];
+                            catagoryProductsmodelFatches = new String[response.data().category().products().size()];
 
                             for (int i = 0; i < response.data().category().products().size(); i++) {
                                 String name = response.data().category().products().get(i).name();
                                 String image = response.data().category().products().get(i).image();
-                                String price = response.data().category().products().get(i).price();
+                                String Price1= response.data().category().products().get(i).price();
+                                Price1=Price1.substring(Price1.indexOf(Price1,0),Price1.indexOf('.')+3);
+                                String price =Price1;
                                 String description = response.data().category().products().get(i).description();
                                 String id = response.data().category().products().get(i).product_id();
                                 int size = response.data().category().products().get(i).images().size();
@@ -420,11 +551,24 @@ public class Catagory_Product_List extends AppCompatActivity implements Recycler
                                 String length = response.data().category().products().get(i).length().toString();
                                 String width = response.data().category().products().get(i).width().toString();
                                 String height = response.data().category().products().get(i).height().toString();
+                                String model = response.data().category().products().get(i).model();
+                                Log.d("mothhhel", "run: "+model);
+                                int hsize=0;
+                                try {
+                                     hsize=Objects.requireNonNull(Objects.requireNonNull(Objects.requireNonNull(response.data().category().products()).get(i).options()).get(0).product_option_value()).size();
+                                }catch (Exception e){
 
+                                }
+
+                                String[] sizees=new String[hsize];
+                                for(int i1=0;i1<hsize;i1++){
+                                    sizees[i1] = Objects.requireNonNull(Objects.requireNonNull(Objects.requireNonNull(response.data().category().products()).get(i).options()).get(0).product_option_value()).get(i1).name();
+
+                                }
 
                                 catagoryProductsNameFatches[i] = name;
                                 catagoryProductsimageFatches[i] = "https://ariza.style/image/"+image;
-                                catagoryProductsPriceFatches[i] = price;
+                                catagoryProductsPriceFatches[i] = price+" BDT";
                                 catagoryProductsDescriptionFatches[i] = description;
                                 catagoryProductsIDFatches[i] = id;
                                 catagoryProductsimagesFatches[i] = images;
@@ -435,9 +579,17 @@ public class Catagory_Product_List extends AppCompatActivity implements Recycler
                                 catagoryProductslengthFatches[i] = length;
                                 catagoryProductswidthFatches[i] = width;
                                 catagoryProductsheightFatches[i] = height;
+                                catagoryProductsmodelFatches[i] = model;
+                                catagoryProductssizeFatches[i] = sizees;
                             }
 
-                            loadlist();
+                        }
+                    });
+
+                            handler7.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                            //loadlist();
                             productlistshow();
                         }
                     }, 1500);
@@ -452,9 +604,10 @@ public class Catagory_Product_List extends AppCompatActivity implements Recycler
             apolloClient.query(new JuniorQuery()).enqueue(new ApolloCall.Callback<JuniorQuery.Data>() {
                 @Override
                 public void onResponse(@NotNull Response<JuniorQuery.Data> response) {
-                    handler7.postDelayed(new Runnable() {
-                        @Override
+
+                    executorService.execute(new Runnable() {
                         public void run() {
+                            //do your work1 here
                            // assert response.data() != null;
                             catagoryProductsNameFatches = new String[response.data().category().products().size()];
                             catagoryProductsimageFatches = new String[response.data().category().products().size()];
@@ -470,11 +623,15 @@ public class Catagory_Product_List extends AppCompatActivity implements Recycler
                             catagoryProductslengthFatches = new String[response.data().category().products().size()];
                             catagoryProductswidthFatches = new String[response.data().category().products().size()];
                             catagoryProductsheightFatches = new String[response.data().category().products().size()];
+                            catagoryProductssizeFatches = new String[response.data().category().products().size()][10];
+                            catagoryProductsmodelFatches = new String[response.data().category().products().size()];
 
                             for (int i = 0; i < response.data().category().products().size(); i++) {
                                 String name = response.data().category().products().get(i).name();
                                 String image = response.data().category().products().get(i).image();
-                                String price = response.data().category().products().get(i).price();
+                                String Price1= response.data().category().products().get(i).price();
+                                Price1=Price1.substring(Price1.indexOf(Price1,0),Price1.indexOf('.')+3);
+                                String price =Price1;
                                 String description = response.data().category().products().get(i).description();
                                 String id = response.data().category().products().get(i).product_id();
                                 int size = response.data().category().products().get(i).images().size();
@@ -489,12 +646,25 @@ public class Catagory_Product_List extends AppCompatActivity implements Recycler
                                 String length = response.data().category().products().get(i).length().toString();
                                 String width = response.data().category().products().get(i).width().toString();
                                 String height = response.data().category().products().get(i).height().toString();
+                                String model = response.data().category().products().get(i).model();
+                                Log.d("mothhhel", "run: "+model);
+                                int hsize = 0;
+                                try {
+                                     hsize=Objects.requireNonNull(Objects.requireNonNull(Objects.requireNonNull(response.data().category().products()).get(i).options()).get(0).product_option_value()).size();
+                                }catch (Exception e){
 
+                                }
+
+                                String[] sizees=new String[hsize];
+                                for(int i1=0;i1<hsize;i1++){
+                                    sizees[i1] = Objects.requireNonNull(Objects.requireNonNull(Objects.requireNonNull(response.data().category().products()).get(i).options()).get(0).product_option_value()).get(i1).name();
+
+                                }
 
                                 catagoryProductsNameFatches[i] = name;
                              //   Toast.makeText(Catagory_Product_List.this, "baaaal: "+i+" "+catagoryProductsNameFatches[i], Toast.LENGTH_SHORT).show();
                                 catagoryProductsimageFatches[i] = "https://ariza.style/image/"+image;
-                                catagoryProductsPriceFatches[i] = price;
+                                catagoryProductsPriceFatches[i] = price+" BDT";
                                 catagoryProductsDescriptionFatches[i] = description;
                                 catagoryProductsIDFatches[i] = id;
                                 catagoryProductsimagesFatches[i] = images;
@@ -505,12 +675,23 @@ public class Catagory_Product_List extends AppCompatActivity implements Recycler
                                 catagoryProductslengthFatches[i] = length;
                                 catagoryProductswidthFatches[i] = width;
                                 catagoryProductsheightFatches[i] = height;
+                                catagoryProductsmodelFatches[i] = model;
+                                catagoryProductssizeFatches[i] = sizees;
                             }
 
-                            loadlist();
+                        }
+                    });
+
+                    handler7.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
                             productlistshow();
                         }
-                    }, 1500);
+                    },1500);
+
+                           // loadlist();
+
+
                 }
 
                 @Override
@@ -522,9 +703,10 @@ public class Catagory_Product_List extends AppCompatActivity implements Recycler
             apolloClient.query(new LatestCatalogQuery()).enqueue(new ApolloCall.Callback<LatestCatalogQuery.Data>() {
                 @Override
                 public void onResponse(@NotNull Response<LatestCatalogQuery.Data> response) {
-                    handler7.postDelayed(new Runnable() {
-                        @Override
+
+                    executorService.execute(new Runnable() {
                         public void run() {
+
                            // assert response.data() != null;
                             catagoryProductsNameFatches = new String[response.data().category().products().size()];
                             catagoryProductsimageFatches = new String[response.data().category().products().size()];
@@ -540,11 +722,15 @@ public class Catagory_Product_List extends AppCompatActivity implements Recycler
                             catagoryProductslengthFatches = new String[response.data().category().products().size()];
                             catagoryProductswidthFatches = new String[response.data().category().products().size()];
                             catagoryProductsheightFatches = new String[response.data().category().products().size()];
+                            catagoryProductssizeFatches = new String[response.data().category().products().size()][10];
+                            catagoryProductsmodelFatches = new String[response.data().category().products().size()];
 
                             for (int i = 0; i < response.data().category().products().size(); i++) {
                                 String name = response.data().category().products().get(i).name();
                                 String image = response.data().category().products().get(i).image();
-                                String price = response.data().category().products().get(i).price();
+                                String Price1= response.data().category().products().get(i).price();
+                                Price1=Price1.substring(Price1.indexOf(Price1,0),Price1.indexOf('.')+3);
+                                String price =Price1;
                                 String description = response.data().category().products().get(i).description();
                                 String id = response.data().category().products().get(i).product_id();
                                 int size = response.data().category().products().get(i).images().size();
@@ -559,11 +745,24 @@ public class Catagory_Product_List extends AppCompatActivity implements Recycler
                                 String length = response.data().category().products().get(i).length().toString();
                                 String width = response.data().category().products().get(i).width().toString();
                                 String height = response.data().category().products().get(i).height().toString();
+                                String model = response.data().category().products().get(i).model();
+                                Log.d("mothhhel", "run: "+model);
+                                int hsize=0;
+                                try {
+                                     hsize=Objects.requireNonNull(Objects.requireNonNull(Objects.requireNonNull(response.data().category().products()).get(i).options()).get(0).product_option_value()).size();
+                                }catch (Exception e){
 
+                                }
+
+                                String[] sizees=new String[hsize];
+                                for(int i1=0;i1<hsize;i1++){
+                                    sizees[i1] = Objects.requireNonNull(Objects.requireNonNull(Objects.requireNonNull(response.data().category().products()).get(i).options()).get(0).product_option_value()).get(i1).name();
+
+                                }
 
                                 catagoryProductsNameFatches[i] = name;
                                 catagoryProductsimageFatches[i] = "https://ariza.style/image/"+image;
-                                catagoryProductsPriceFatches[i] = price;
+                                catagoryProductsPriceFatches[i] = price+" BDT";
                                 catagoryProductsDescriptionFatches[i] = description;
                                 catagoryProductsIDFatches[i] = id;
                                 catagoryProductsimagesFatches[i] = images;
@@ -574,9 +773,18 @@ public class Catagory_Product_List extends AppCompatActivity implements Recycler
                                 catagoryProductslengthFatches[i] = length;
                                 catagoryProductswidthFatches[i] = width;
                                 catagoryProductsheightFatches[i] = height;
+                                catagoryProductsmodelFatches[i] = model;
+                                catagoryProductssizeFatches[i] = sizees;
                             }
 
-                            loadlist();
+                        }
+                    });
+
+            handler7.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+
+                            //loadlist();
                             productlistshow();
                         }
                     }, 1500);
@@ -591,9 +799,10 @@ public class Catagory_Product_List extends AppCompatActivity implements Recycler
             apolloClient.query(new MensQuery()).enqueue(new ApolloCall.Callback<MensQuery.Data>() {
                 @Override
                 public void onResponse(@NotNull Response<MensQuery.Data> response) {
-                    handler7.postDelayed(new Runnable() {
-                        @Override
+
+                    executorService.execute(new Runnable() {
                         public void run() {
+
                             //assert response.data() != null;
                             catagoryProductsNameFatches = new String[response.data().category().products().size()];
                             catagoryProductsimageFatches = new String[response.data().category().products().size()];
@@ -609,11 +818,15 @@ public class Catagory_Product_List extends AppCompatActivity implements Recycler
                             catagoryProductslengthFatches = new String[response.data().category().products().size()];
                             catagoryProductswidthFatches = new String[response.data().category().products().size()];
                             catagoryProductsheightFatches = new String[response.data().category().products().size()];
+                            catagoryProductssizeFatches = new String[response.data().category().products().size()][10];
+                            catagoryProductsmodelFatches = new String[response.data().category().products().size()];
 
                             for (int i = 0; i < response.data().category().products().size(); i++) {
                                 String name = response.data().category().products().get(i).name();
                                 String image = response.data().category().products().get(i).image();
-                                String price = response.data().category().products().get(i).price();
+                                String Price1= response.data().category().products().get(i).price();
+                                Price1=Price1.substring(Price1.indexOf(Price1,0),Price1.indexOf('.')+3);
+                                String price =Price1;
                                 String description = response.data().category().products().get(i).description();
                                 String id = response.data().category().products().get(i).product_id();
                                 int size = response.data().category().products().get(i).images().size();
@@ -628,11 +841,24 @@ public class Catagory_Product_List extends AppCompatActivity implements Recycler
                                 String length = response.data().category().products().get(i).length().toString();
                                 String width = response.data().category().products().get(i).width().toString();
                                 String height = response.data().category().products().get(i).height().toString();
+                                String model = response.data().category().products().get(i).model();
+                                Log.d("mothhhel", "run: "+model);
+                                int hsize=0;
+                                try {
+                                     hsize=Objects.requireNonNull(Objects.requireNonNull(Objects.requireNonNull(response.data().category().products()).get(i).options()).get(0).product_option_value()).size();
+                                }catch (Exception e){
 
+                                }
+
+                                String[] sizees=new String[hsize];
+                                for(int i1=0;i1<hsize;i1++){
+                                    sizees[i1] = Objects.requireNonNull(Objects.requireNonNull(Objects.requireNonNull(response.data().category().products()).get(i).options()).get(0).product_option_value()).get(i1).name();
+
+                                }
 
                                 catagoryProductsNameFatches[i] = name;
                                 catagoryProductsimageFatches[i] = "https://ariza.style/image/"+image;
-                                catagoryProductsPriceFatches[i] = price;
+                                catagoryProductsPriceFatches[i] = price+" BDT";
                                 catagoryProductsDescriptionFatches[i] = description;
                                 catagoryProductsIDFatches[i] = id;
                                 catagoryProductsimagesFatches[i] = images;
@@ -643,9 +869,18 @@ public class Catagory_Product_List extends AppCompatActivity implements Recycler
                                 catagoryProductslengthFatches[i] = length;
                                 catagoryProductswidthFatches[i] = width;
                                 catagoryProductsheightFatches[i] = height;
+                                catagoryProductsmodelFatches[i] = model;
+                                catagoryProductssizeFatches[i] = sizees;
                             }
 
-                            loadlist();
+                        }
+                    });
+
+
+                    handler7.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                            //loadlist();
                             productlistshow();
                         }
                     }, 10000);
@@ -660,10 +895,9 @@ public class Catagory_Product_List extends AppCompatActivity implements Recycler
             apolloClient.query(new WomensQuery()).enqueue(new ApolloCall.Callback<WomensQuery.Data>() {
                 @Override
                 public void onResponse(@NotNull Response<WomensQuery.Data> response) {
-                    handler7.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
 
+                    executorService.execute(new Runnable() {
+                        public void run() {
                             catagoryProductsNameFatches = new String[response.data().category().products().size()];
                             catagoryProductsimageFatches = new String[response.data().category().products().size()];
                             catagoryProductsPriceFatches = new String[response.data().category().products().size()];
@@ -678,11 +912,15 @@ public class Catagory_Product_List extends AppCompatActivity implements Recycler
                             catagoryProductslengthFatches = new String[response.data().category().products().size()];
                             catagoryProductswidthFatches = new String[response.data().category().products().size()];
                             catagoryProductsheightFatches = new String[response.data().category().products().size()];
+                            catagoryProductssizeFatches = new String[response.data().category().products().size()][10];
+                            catagoryProductsmodelFatches = new String[response.data().category().products().size()];
 
                             for (int i = 0; i < response.data().category().products().size(); i++) {
                                 String name = response.data().category().products().get(i).name();
                                 String image = response.data().category().products().get(i).image();
-                                String price = response.data().category().products().get(i).price();
+                                String Price1= response.data().category().products().get(i).price();
+                                Price1=Price1.substring(Price1.indexOf(Price1,0),Price1.indexOf('.')+3);
+                                String price =Price1;
                                 String description = response.data().category().products().get(i).description();
                                 String id = response.data().category().products().get(i).product_id();
                                 int size = response.data().category().products().get(i).images().size();
@@ -697,11 +935,24 @@ public class Catagory_Product_List extends AppCompatActivity implements Recycler
                                 String length = response.data().category().products().get(i).length().toString();
                                 String width = response.data().category().products().get(i).width().toString();
                                 String height = response.data().category().products().get(i).height().toString();
+                                String model = response.data().category().products().get(i).model();
+                                Log.d("mothhhel", "run: "+model);
+                                int hsize=0;
+                                try {
+                                      hsize=Objects.requireNonNull(Objects.requireNonNull(Objects.requireNonNull(response.data().category().products()).get(i).options()).get(0).product_option_value()).size();
+                                 }catch (Exception e){
 
+                                 }
+
+                                String[] sizees=new String[hsize];
+                                for(int i1=0;i1<hsize;i1++){
+                                    sizees[i1] = Objects.requireNonNull(Objects.requireNonNull(Objects.requireNonNull(response.data().category().products()).get(i).options()).get(0).product_option_value()).get(i1).name();
+
+                                }
 
                                 catagoryProductsNameFatches[i] = name;
                                 catagoryProductsimageFatches[i] = "https://ariza.style/image/"+image;
-                                catagoryProductsPriceFatches[i] = price;
+                                catagoryProductsPriceFatches[i] = price+" BDT";
                                 catagoryProductsDescriptionFatches[i] = description;
                                 catagoryProductsIDFatches[i] = id;
                                 catagoryProductsimagesFatches[i] = images;
@@ -712,9 +963,18 @@ public class Catagory_Product_List extends AppCompatActivity implements Recycler
                                 catagoryProductslengthFatches[i] = length;
                                 catagoryProductswidthFatches[i] = width;
                                 catagoryProductsheightFatches[i] = height;
+                                catagoryProductsmodelFatches[i] = model;
+                                catagoryProductssizeFatches[i] = sizees;
                             }
 
-                            loadlist();
+                        }
+                    });
+
+
+            handler7.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    //loadlist();
                             productlistshow();
                         }
                     }, 10000);
@@ -733,95 +993,102 @@ public class Catagory_Product_List extends AppCompatActivity implements Recycler
     }
 
     private void productlistshow() {
+        cat_datalist=new ArrayList<>();
+        for (int itemCount=0;itemCount<catagoryProductsNameFatches.length;itemCount++){
+           CatagoryWiseProductsModel catagoryWiseProductsModel=new CatagoryWiseProductsModel(catagoryProductsimageFatches != null ? catagoryProductsimageFatches[itemCount] : "", catagoryProductsNameFatches != null ? catagoryProductsNameFatches[itemCount] : "", catagoryProductsPriceFatches != null ? catagoryProductsPriceFatches[itemCount] : "", catagoryProductsdescriptionFatches != null ? catagoryProductsdescriptionFatches[itemCount] : "", catagoryProductsIDFatches != null ? catagoryProductsIDFatches[itemCount] : "", catagoryProductsimagesFatches != null ? catagoryProductsimagesFatches[itemCount] : new String[0], catagoryProductsmetadescriptionFatches != null ? catagoryProductsmetadescriptionFatches[itemCount] : "", catagoryProductsstockstatusFatches != null ? catagoryProductsstockstatusFatches[itemCount] : "", catagoryProductsquantityFatches != null ? catagoryProductsquantityFatches[itemCount] : "", catagoryProductsweightFatches != null ? catagoryProductsweightFatches[itemCount] : "", catagoryProductslengthFatches != null ? catagoryProductslengthFatches[itemCount] : "", catagoryProductswidthFatches != null ? catagoryProductswidthFatches[itemCount] : "", catagoryProductsheightFatches != null ? catagoryProductsheightFatches[itemCount] : "",catagoryProductsmodelFatches!=null? catagoryProductsmodelFatches[itemCount]:"",catagoryProductssizeFatches!=null? catagoryProductssizeFatches[itemCount]:new String[0]);
+           cat_datalist.add(catagoryWiseProductsModel);
+
+
+        }
         linearLayoutManager=new LinearLayoutManager(Catagory_Product_List.this);
         catagoryProductRecyclerView.setLayoutManager(linearLayoutManager);
         recyclerViewAdapterForCatagoryProduct=new RecyclerViewAdapterForCatagoryProduct(Catagory_Product_List.this,cat_datalist,this);
         catagoryProductRecyclerView.setAdapter(recyclerViewAdapterForCatagoryProduct);
-        addscrollListenerList();
+      //  addscrollListenerList();
     }
 
-    private void addscrollListenerList() {
-        catagoryProductRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                if(!isLoading){
-                    if (linearLayoutManager.findLastCompletelyVisibleItemPosition()==cat_datalist.size()-1){
-                        loadmoreList();
-                        isLoading=true;
-                    }
-                }
-            }
-        });
-    }
+//    private void addscrollListenerList() {
+//        catagoryProductRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+//                super.onScrolled(recyclerView, dx, dy);
+//                if(!isLoading){
+//                    if (linearLayoutManager.findLastCompletelyVisibleItemPosition()==cat_datalist.size()-1){
+//                        loadmoreList();
+//                        isLoading=true;
+//                    }
+//                }
+//            }
+//        });
+//    }
 
-    private void loadmoreList() {
-        handler8.post(new Runnable() {
-            @Override
-            public void run() {
-               CatagoryWiseProductsModel catagoryWiseProductsModel=new CatagoryWiseProductsModel("default","load","default","default","default",catagoryProductsdefault,"default","default","default","default","default","default","default");
-               cat_datalist.add(catagoryWiseProductsModel);
-               recyclerViewAdapterForCatagoryProduct.notifyItemInserted(cat_datalist.size()-1);
-            }
-        });
-        handler8.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                cat_datalist.remove(cat_datalist.size()-1);
-                int listsize=cat_datalist.size();
-                recyclerViewAdapterForCatagoryProduct.notifyItemRemoved(listsize);
+//    private void loadmoreList() {
+//        handler8.post(new Runnable() {
+//            @Override
+//            public void run() {
+//               CatagoryWiseProductsModel catagoryWiseProductsModel=new CatagoryWiseProductsModel("default","load","default","default","default",catagoryProductsdefault,"default","default","default","default","default","default","default");
+//               cat_datalist.add(catagoryWiseProductsModel);
+//               recyclerViewAdapterForCatagoryProduct.notifyItemInserted(cat_datalist.size()-1);
+//            }
+//        });
+//        handler8.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                cat_datalist.remove(cat_datalist.size()-1);
+//                int listsize=cat_datalist.size();
+//                recyclerViewAdapterForCatagoryProduct.notifyItemRemoved(listsize);
+//
+//                int nextLimit=listsize+10;
+//                for(int itemCount=listsize;itemCount<nextLimit;itemCount++){
+//                    try{
+//                        catagoryWiseProductsModel=new CatagoryWiseProductsModel(catagoryProductsimageFatches != null ? catagoryProductsimageFatches[itemCount] : "", catagoryProductsNameFatches != null ? catagoryProductsNameFatches[itemCount] : "", catagoryProductsPriceFatches != null ? catagoryProductsPriceFatches[itemCount] : "", catagoryProductsdescriptionFatches != null ? catagoryProductsdescriptionFatches[itemCount] : "", catagoryProductsIDFatches != null ? catagoryProductsIDFatches[itemCount] : "", catagoryProductsimagesFatches != null ? catagoryProductsimagesFatches[itemCount] : new String[0], catagoryProductsmetadescriptionFatches != null ? catagoryProductsmetadescriptionFatches[itemCount] : "", catagoryProductsstockstatusFatches != null ? catagoryProductsstockstatusFatches[itemCount] : "", catagoryProductsquantityFatches != null ? catagoryProductsquantityFatches[itemCount] : "", catagoryProductsweightFatches != null ? catagoryProductsweightFatches[itemCount] : "", catagoryProductslengthFatches != null ? catagoryProductslengthFatches[itemCount] : "", catagoryProductswidthFatches != null ? catagoryProductswidthFatches[itemCount] : "", catagoryProductsheightFatches != null ? catagoryProductsheightFatches[itemCount] : "");
+//                        cat_datalist.add(catagoryWiseProductsModel);
+//                    }catch (ArrayIndexOutOfBoundsException e){
+//                       // noProduct.setVisibility(View.VISIBLE);
+//                    }
+//
+//
+//                }
+//
+//                recyclerViewAdapterForCatagoryProduct.notifyDataSetChanged();
+//                isLoading=false;
+//            }
+//        },5000);
+//    }
 
-                int nextLimit=listsize+10;
-                for(int itemCount=listsize;itemCount<nextLimit;itemCount++){
-                    try{
-                        catagoryWiseProductsModel=new CatagoryWiseProductsModel(catagoryProductsimageFatches != null ? catagoryProductsimageFatches[itemCount] : "", catagoryProductsNameFatches != null ? catagoryProductsNameFatches[itemCount] : "", catagoryProductsPriceFatches != null ? catagoryProductsPriceFatches[itemCount] : "", catagoryProductsdescriptionFatches != null ? catagoryProductsdescriptionFatches[itemCount] : "", catagoryProductsIDFatches != null ? catagoryProductsIDFatches[itemCount] : "", catagoryProductsimagesFatches != null ? catagoryProductsimagesFatches[itemCount] : new String[0], catagoryProductsmetadescriptionFatches != null ? catagoryProductsmetadescriptionFatches[itemCount] : "", catagoryProductsstockstatusFatches != null ? catagoryProductsstockstatusFatches[itemCount] : "", catagoryProductsquantityFatches != null ? catagoryProductsquantityFatches[itemCount] : "", catagoryProductsweightFatches != null ? catagoryProductsweightFatches[itemCount] : "", catagoryProductslengthFatches != null ? catagoryProductslengthFatches[itemCount] : "", catagoryProductswidthFatches != null ? catagoryProductswidthFatches[itemCount] : "", catagoryProductsheightFatches != null ? catagoryProductsheightFatches[itemCount] : "");
-                        cat_datalist.add(catagoryWiseProductsModel);
-                    }catch (ArrayIndexOutOfBoundsException e){
-                       // noProduct.setVisibility(View.VISIBLE);
-                    }
+//    @Nullable
+//    private void loadlist() {
+//
+//        for (int i=0;i<10;i++){
+////            Toast.makeText(this,"Image:"+catagoryProductsimageFatches[i] , Toast.LENGTH_SHORT).show();
+////            Toast.makeText(this, i+catagoryProductsNameFatches[i], Toast.LENGTH_SHORT).show();
+////            Toast.makeText(this, i+catagoryProductsPriceFatches[i], Toast.LENGTH_SHORT).show();
+//////      Toast.makeText(this, catagoryProductsdescriptionFatches[0], Toast.LENGTH_SHORT).show();
+////            Toast.makeText(this, i+catagoryProductsIDFatches[i], Toast.LENGTH_SHORT).show();
+//////            Toast.makeText(this, i+catagoryProductsimagesFatches[i][0], Toast.LENGTH_SHORT).show();
+////            Toast.makeText(this, i+catagoryProductsmetadescriptionFatches[i], Toast.LENGTH_SHORT).show();
+////            Toast.makeText(this, i+catagoryProductsstockstatusFatches[i], Toast.LENGTH_SHORT).show();
+////            Toast.makeText(this, i+catagoryProductsquantityFatches[i], Toast.LENGTH_SHORT).show();
+////            Toast.makeText(this, i+catagoryProductsweightFatches[i], Toast.LENGTH_SHORT).show();
+////            Toast.makeText(this, i+catagoryProductslengthFatches[i], Toast.LENGTH_SHORT).show();
+////            Toast.makeText(this, i+catagoryProductswidthFatches[i], Toast.LENGTH_SHORT).show();
+////            Toast.makeText(this, i+catagoryProductsheightFatches[i], Toast.LENGTH_SHORT).show();
+//           // if(catagoryProductsimageFatches[itemCount]!=null&&catagoryProductsNameFatches[itemCount]!=null&&catagoryProductsPriceFatches[itemCount]!=null&&catagoryProductsdescriptionFatches[itemCount]!=null&&catagoryProductsIDFatches[itemCount]!=null&&catagoryProductsimagesFatches[itemCount]!=null&&catagoryProductsmetadescriptionFatches[itemCount]!=null&&catagoryProductsstockstatusFatches[itemCount]!=null&&catagoryProductsquantityFatches[itemCount]!=null&&catagoryProductsweightFatches[itemCount]!=null&&catagoryProductslengthFatches[itemCount]!=null&&catagoryProductswidthFatches[itemCount]!=null&&catagoryProductsheightFatches[itemCount]!=null){
+//
+//            try {
+//                catagoryWiseProductsModel=new CatagoryWiseProductsModel( catagoryProductsimageFatches[i],catagoryProductsNameFatches[i],catagoryProductsPriceFatches[i], catagoryProductsdescriptionFatches != null ? catagoryProductsdescriptionFatches[i] : "",catagoryProductsIDFatches[i], catagoryProductsimagesFatches != null ? catagoryProductsimagesFatches[i] : new String[0] ,catagoryProductsmetadescriptionFatches[i],catagoryProductsstockstatusFatches[i],catagoryProductsquantityFatches[i],catagoryProductsweightFatches[i],catagoryProductslengthFatches[i],catagoryProductswidthFatches[i],catagoryProductsheightFatches[i]);
+//                cat_datalist.add(catagoryWiseProductsModel);
+//            }catch (ArrayIndexOutOfBoundsException e){
+//               // noProduct.setVisibility(View.VISIBLE);
+//            }
+//
+//
+//           // }
+//
+//        }
 
 
-                }
-
-                recyclerViewAdapterForCatagoryProduct.notifyDataSetChanged();
-                isLoading=false;
-            }
-        },5000);
-    }
-
-    @Nullable
-    private void loadlist() {
-
-        for (int i=0;i<10;i++){
-//            Toast.makeText(this,"Image:"+catagoryProductsimageFatches[i] , Toast.LENGTH_SHORT).show();
-//            Toast.makeText(this, i+catagoryProductsNameFatches[i], Toast.LENGTH_SHORT).show();
-//            Toast.makeText(this, i+catagoryProductsPriceFatches[i], Toast.LENGTH_SHORT).show();
-////      Toast.makeText(this, catagoryProductsdescriptionFatches[0], Toast.LENGTH_SHORT).show();
-//            Toast.makeText(this, i+catagoryProductsIDFatches[i], Toast.LENGTH_SHORT).show();
-////            Toast.makeText(this, i+catagoryProductsimagesFatches[i][0], Toast.LENGTH_SHORT).show();
-//            Toast.makeText(this, i+catagoryProductsmetadescriptionFatches[i], Toast.LENGTH_SHORT).show();
-//            Toast.makeText(this, i+catagoryProductsstockstatusFatches[i], Toast.LENGTH_SHORT).show();
-//            Toast.makeText(this, i+catagoryProductsquantityFatches[i], Toast.LENGTH_SHORT).show();
-//            Toast.makeText(this, i+catagoryProductsweightFatches[i], Toast.LENGTH_SHORT).show();
-//            Toast.makeText(this, i+catagoryProductslengthFatches[i], Toast.LENGTH_SHORT).show();
-//            Toast.makeText(this, i+catagoryProductswidthFatches[i], Toast.LENGTH_SHORT).show();
-//            Toast.makeText(this, i+catagoryProductsheightFatches[i], Toast.LENGTH_SHORT).show();
-           // if(catagoryProductsimageFatches[itemCount]!=null&&catagoryProductsNameFatches[itemCount]!=null&&catagoryProductsPriceFatches[itemCount]!=null&&catagoryProductsdescriptionFatches[itemCount]!=null&&catagoryProductsIDFatches[itemCount]!=null&&catagoryProductsimagesFatches[itemCount]!=null&&catagoryProductsmetadescriptionFatches[itemCount]!=null&&catagoryProductsstockstatusFatches[itemCount]!=null&&catagoryProductsquantityFatches[itemCount]!=null&&catagoryProductsweightFatches[itemCount]!=null&&catagoryProductslengthFatches[itemCount]!=null&&catagoryProductswidthFatches[itemCount]!=null&&catagoryProductsheightFatches[itemCount]!=null){
-
-            try {
-                catagoryWiseProductsModel=new CatagoryWiseProductsModel( catagoryProductsimageFatches[i],catagoryProductsNameFatches[i],catagoryProductsPriceFatches[i], catagoryProductsdescriptionFatches != null ? catagoryProductsdescriptionFatches[i] : "",catagoryProductsIDFatches[i], catagoryProductsimagesFatches != null ? catagoryProductsimagesFatches[i] : new String[0] ,catagoryProductsmetadescriptionFatches[i],catagoryProductsstockstatusFatches[i],catagoryProductsquantityFatches[i],catagoryProductsweightFatches[i],catagoryProductslengthFatches[i],catagoryProductswidthFatches[i],catagoryProductsheightFatches[i]);
-                cat_datalist.add(catagoryWiseProductsModel);
-            }catch (ArrayIndexOutOfBoundsException e){
-               // noProduct.setVisibility(View.VISIBLE);
-            }
-
-
-           // }
-
-        }
-
-
-    }
+//    }
 
     @Override
     public void onNoteClickCatagory(int position) {
@@ -839,7 +1106,11 @@ public class Catagory_Product_List extends AppCompatActivity implements Recycler
         intent.putExtra("width",catagoryProductswidthFatches[position]);
         intent.putExtra("height",catagoryProductsheightFatches[position]);
         intent.putExtra("image",catagoryProductsimageFatches[position]);
+        intent.putExtra("model",catagoryProductsmodelFatches[position]);
+        intent.putExtra("size",catagoryProductssizeFatches[position]);
         intent.putExtra("counter","4");
         this.startActivity(intent);
     }
+
+
 }

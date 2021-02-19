@@ -2,137 +2,157 @@ package com.example.shariarspc.ariza_app.Catagories;
 
 public class CatagoryWiseProductsModel {
 
-    String image;
-    String product_name;
-    String price;
-    String description;
-    String productID;
-    String[] images;
-    String metadescription;
-    String stockstatus;
-    String quantity;
-    String weight;
-    String length;
-    String width;
-    String height;
+    String imagecat;
+    String product_namecat;
+    String pricecat;
+    String descriptioncat;
+    String productIDcat;
+    String[] imagescat;
+    String metadescriptioncat;
+    String stockstatuscat;
+    String quantitycat;
+    String weightcat;
+    String lengthcat;
+    String widthcat;
+    String heightcat;
+    String modelcat;
+    String sizecat[];
 
-    public CatagoryWiseProductsModel(String image, String product_name, String price, String description, String productID, String[] images, String metadescription, String stockstatus, String quantity, String weight, String length, String width, String height) {
-        this.image = image;
-        this.product_name = product_name;
-        this.price = price;
-        this.description = description;
-        this.productID = productID;
-        this.images = images;
-        this.metadescription = metadescription;
-        this.stockstatus = stockstatus;
-        this.quantity = quantity;
-        this.weight = weight;
-        this.length = length;
-        this.width = width;
-        this.height = height;
+    public CatagoryWiseProductsModel(String imagecat, String product_namecat, String pricecat, String descriptioncat, String productIDcat, String[] imagescat, String metadescriptioncat, String stockstatuscat, String quantitycat, String weightcat, String lengthcat, String widthcat, String heightcat, String modelcat, String sizecat[]) {
+        this.imagecat = imagecat;
+        this.product_namecat = product_namecat;
+        this.pricecat = pricecat;
+        this.descriptioncat = descriptioncat;
+        this.productIDcat = productIDcat;
+        this.imagescat = imagescat;
+        this.metadescriptioncat = metadescriptioncat;
+        this.stockstatuscat = stockstatuscat;
+        this.quantitycat = quantitycat;
+        this.weightcat = weightcat;
+        this.lengthcat = lengthcat;
+        this.widthcat = widthcat;
+        this.heightcat = heightcat;
+        this.modelcat = modelcat;
+        this.sizecat = sizecat;
     }
 
-    public String[] getImages() {
-        return images;
+    public String getImagecat() {
+        return imagecat;
     }
 
-    public void setImages(String[] images) {
-        this.images = images;
+    public void setImagecat(String imagecat) {
+        this.imagecat = imagecat;
     }
 
-    public String getMetadescription() {
-        return metadescription;
+    public String getProduct_namecat() {
+        return product_namecat;
     }
 
-    public void setMetadescription(String metadescription) {
-        this.metadescription = metadescription;
+    public void setProduct_namecat(String product_namecat) {
+        this.product_namecat = product_namecat;
     }
 
-    public String getStockstatus() {
-        return stockstatus;
+    public String getPricecat() {
+        return pricecat;
     }
 
-    public void setStockstatus(String stockstatus) {
-        this.stockstatus = stockstatus;
+    public void setPricecat(String pricecat) {
+        this.pricecat = pricecat;
     }
 
-    public String getQuantity() {
-        return quantity;
+    public String getDescriptioncat() {
+        return descriptioncat;
     }
 
-    public void setQuantity(String quantity) {
-        this.quantity = quantity;
+    public void setDescriptioncat(String descriptioncat) {
+        this.descriptioncat = descriptioncat;
     }
 
-    public String getWeight() {
-        return weight;
+    public String getProductIDcat() {
+        return productIDcat;
     }
 
-    public void setWeight(String weight) {
-        this.weight = weight;
+    public void setProductIDcat(String productIDcat) {
+        this.productIDcat = productIDcat;
     }
 
-    public String getLength() {
-        return length;
+    public String[] getImagescat() {
+        return imagescat;
     }
 
-    public void setLength(String length) {
-        this.length = length;
+    public void setImagescat(String[] imagescat) {
+        this.imagescat = imagescat;
     }
 
-    public String getWidth() {
-        return width;
+    public String getMetadescriptioncat() {
+        return metadescriptioncat;
     }
 
-    public void setWidth(String width) {
-        this.width = width;
+    public void setMetadescriptioncat(String metadescriptioncat) {
+        this.metadescriptioncat = metadescriptioncat;
     }
 
-    public String getHeight() {
-        return height;
+    public String getStockstatuscat() {
+        return stockstatuscat;
     }
 
-    public void setHeight(String height) {
-        this.height = height;
+    public void setStockstatuscat(String stockstatuscat) {
+        this.stockstatuscat = stockstatuscat;
     }
 
-    public String getProductID() {
-        return productID;
+    public String getQuantitycat() {
+        return quantitycat;
     }
 
-    public void setProductID(String productID) {
-        this.productID = productID;
+    public void setQuantitycat(String quantitycat) {
+        this.quantitycat = quantitycat;
     }
 
-    public String getPrice() {
-        return price;
+    public String getWeightcat() {
+        return weightcat;
     }
 
-    public void setPrice(String price) {
-        this.price = price;
+    public void setWeightcat(String weightcat) {
+        this.weightcat = weightcat;
     }
 
-    public String getDescription() {
-        return description;
+    public String getLengthcat() {
+        return lengthcat;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setLengthcat(String lengthcat) {
+        this.lengthcat = lengthcat;
     }
 
-    public String getImage() {
-        return image;
+    public String getWidthcat() {
+        return widthcat;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setWidthcat(String widthcat) {
+        this.widthcat = widthcat;
     }
 
-    public String getProduct_name() {
-        return product_name;
+    public String getHeightcat() {
+        return heightcat;
     }
 
-    public void setProduct_name(String product_name) {
-        this.product_name = product_name;
+    public void setHeightcat(String heightcat) {
+        this.heightcat = heightcat;
+    }
+
+    public String getModelcat() {
+        return modelcat;
+    }
+
+    public void setModelcat(String modelcat) {
+        this.modelcat = modelcat;
+    }
+
+    public String[] getSizecat() {
+        return sizecat;
+    }
+
+    public void setSizecat(String[] sizecat) {
+        this.sizecat = sizecat;
     }
 }

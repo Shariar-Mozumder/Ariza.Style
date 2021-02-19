@@ -2,137 +2,157 @@ package com.example.shariarspc.ariza_app.TopSell;
 
 public class TopsellModel {
 
-    String image;
-    String product_name;
-    String price;
-    String productID;
-    String[] images;
-    String metadescription;
-    String stockstatus;
-    String quantity;
-    String description;
-    String weight;
-    String length;
-    String width;
-    String height;
+    String imagetop;
+    String product_nametop;
+    String pricetop;
+    String productIDtop;
+    String[] imagestop;
+    String metadescriptiontop;
+    String stockstatustop;
+    String quantitytop;
+    String descriptiontop;
+    String weighttop;
+    String lengthtop;
+    String widthtop;
+    String heighttop;
+    String modeltop;
+    String[] sizetop;
 
-    public TopsellModel(String image, String product_name, String price, String productID, String[] images, String metadescription, String stockstatus, String quantity, String description, String weight, String length, String width, String height) {
-        this.image = image;
-        this.product_name = product_name;
-        this.price = price;
-        this.productID = productID;
-        this.images = images;
-        this.metadescription = metadescription;
-        this.stockstatus = stockstatus;
-        this.quantity = quantity;
-        this.description = description;
-        this.weight = weight;
-        this.length = length;
-        this.width = width;
-        this.height = height;
+    public TopsellModel(String imagetop, String product_nametop, String pricetop, String productIDtop, String[] imagestop, String metadescriptiontop, String stockstatustop, String quantitytop, String descriptiontop, String weighttop, String lengthtop, String widthtop, String heighttop,String modeltop,String[] sizetop) {
+        this.imagetop = imagetop;
+        this.product_nametop = product_nametop;
+        this.pricetop = pricetop;
+        this.productIDtop = productIDtop;
+        this.imagestop = imagestop;
+        this.metadescriptiontop = metadescriptiontop;
+        this.stockstatustop = stockstatustop;
+        this.quantitytop = quantitytop;
+        this.descriptiontop = descriptiontop;
+        this.weighttop = weighttop;
+        this.lengthtop = lengthtop;
+        this.widthtop = widthtop;
+        this.heighttop = heighttop;
+        this.modeltop=modeltop;
+        this.sizetop=sizetop;
     }
 
-    public String[] getImages() {
-        return images;
+    public String getModeltop() {
+        return modeltop;
     }
 
-    public void setImages(String[] images) {
-        this.images = images;
+    public void setModeltop(String modeltop) {
+        this.modeltop = modeltop;
     }
 
-    public String getMetadescription() {
-        return metadescription;
+    public String[] getSizetop() {
+        return sizetop;
     }
 
-    public void setMetadescription(String metadescription) {
-        this.metadescription = metadescription;
+    public void setSizetop(String[] sizetop) {
+        this.sizetop = sizetop;
     }
 
-    public String getStockstatus() {
-        return stockstatus;
+    public String getImagetop() {
+        return imagetop;
     }
 
-    public void setStockstatus(String stockstatus) {
-        this.stockstatus = stockstatus;
+    public void setImagetop(String imagetop) {
+        this.imagetop = imagetop;
     }
 
-    public String getQuantity() {
-        return quantity;
+    public String getProduct_nametop() {
+        return product_nametop;
     }
 
-    public void setQuantity(String quantity) {
-        this.quantity = quantity;
+    public void setProduct_nametop(String product_nametop) {
+        this.product_nametop = product_nametop;
     }
 
-    public String getDescription() {
-        return description;
+    public String getPricetop() {
+        return pricetop;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setPricetop(String pricetop) {
+        this.pricetop = pricetop;
     }
 
-    public String getWeight() {
-        return weight;
+    public String getProductIDtop() {
+        return productIDtop;
     }
 
-    public void setWeight(String weight) {
-        this.weight = weight;
+    public void setProductIDtop(String productIDtop) {
+        this.productIDtop = productIDtop;
     }
 
-    public String getLength() {
-        return length;
+    public String[] getImagestop() {
+        return imagestop;
     }
 
-    public void setLength(String length) {
-        this.length = length;
+    public void setImagestop(String[] imagestop) {
+        this.imagestop = imagestop;
     }
 
-    public String getWidth() {
-        return width;
+    public String getMetadescriptiontop() {
+        return metadescriptiontop;
     }
 
-    public void setWidth(String width) {
-        this.width = width;
+    public void setMetadescriptiontop(String metadescriptiontop) {
+        this.metadescriptiontop = metadescriptiontop;
     }
 
-    public String getHeight() {
-        return height;
+    public String getStockstatustop() {
+        return stockstatustop;
     }
 
-    public void setHeight(String height) {
-        this.height = height;
+    public void setStockstatustop(String stockstatustop) {
+        this.stockstatustop = stockstatustop;
     }
 
-    public String getProductID() {
-        return productID;
+    public String getQuantitytop() {
+        return quantitytop;
     }
 
-    public void setProductID(String productID) {
-        this.productID = productID;
+    public void setQuantitytop(String quantitytop) {
+        this.quantitytop = quantitytop;
     }
 
-    public String getPrice() {
-        return price;
+    public String getDescriptiontop() {
+        return descriptiontop;
     }
 
-    public void setPrice(String price) {
-        this.price = price;
+    public void setDescriptiontop(String descriptiontop) {
+        this.descriptiontop = descriptiontop;
     }
 
-    public String getImage() {
-        return image;
+    public String getWeighttop() {
+        return weighttop;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setWeighttop(String weighttop) {
+        this.weighttop = weighttop;
     }
 
-    public String getProduct_name() {
-        return product_name;
+    public String getLengthtop() {
+        return lengthtop;
     }
 
-    public void setProduct_name(String product_name) {
-        this.product_name = product_name;
+    public void setLengthtop(String lengthtop) {
+        this.lengthtop = lengthtop;
+    }
+
+    public String getWidthtop() {
+        return widthtop;
+    }
+
+    public void setWidthtop(String widthtop) {
+        this.widthtop = widthtop;
+    }
+
+    public String getHeighttop() {
+        return heighttop;
+    }
+
+    public void setHeighttop(String heighttop) {
+        this.heighttop = heighttop;
     }
 }
