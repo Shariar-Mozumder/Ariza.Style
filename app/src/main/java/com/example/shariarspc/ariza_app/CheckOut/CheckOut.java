@@ -207,8 +207,8 @@ public class CheckOut extends AppCompatActivity {
     handler1.postDelayed(new Runnable() {
         @Override
         public void run() {
-            CartItemOptionInput cartItemOptionInput=CartItemOptionInput.builder().option_id("22").value("S").build();
-            CartItemOptionInput cartItemOptionInput1=CartItemOptionInput.builder().option_id("24").value("Red").build();
+            CartItemOptionInput cartItemOptionInput=CartItemOptionInput.builder().option_id("6772").value("12345").build();
+            CartItemOptionInput cartItemOptionInput1=CartItemOptionInput.builder().option_id("9148").value("16604").build();
             List<CartItemOptionInput> oplist=new ArrayList<>();
             oplist.add(cartItemOptionInput);
             oplist.add(cartItemOptionInput1);
