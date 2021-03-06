@@ -3,6 +3,7 @@ package com.example.shariarspc.ariza_app.CheckOut;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
@@ -27,14 +28,17 @@ import com.apollographql.apollo.exception.ApolloException;
 import com.example.AddToCartItemsMutation;
 import com.example.AddorderMutation;
 import com.example.CartQuery;
+import com.example.UserloginMutation;
 import com.example.shariarspc.ariza_app.Cart.CartProductShow;
 import com.example.shariarspc.ariza_app.Cart.MyDatabaseHelper;
+import com.example.shariarspc.ariza_app.Login_Register.LoginActivity;
 import com.example.shariarspc.ariza_app.MainActivity;
 import com.example.shariarspc.ariza_app.R;
 import com.example.type.CartItemInput;
 import com.example.type.CartItemOptionInput;
 import com.example.type.OrderInput;
 import com.example.type.OrderProductInput;
+import com.example.type.OrderProductOptionInput;
 
 
 import org.jetbrains.annotations.NotNull;
@@ -60,10 +64,13 @@ public class CheckOut extends AppCompatActivity {
 
     Handler handler=new Handler();
     Handler handler1=new Handler();
+    Handler handler22=new Handler();
     CheckOutProductModelFromCart checkOutProductModelFromCart;
 
     MyDatabaseHelper myDatabaseHelper;
     Cursor cursor;
+
+    SharedPreferences pref;
 
     int quantity;
     Input<CartItemOptionInput> optionslist;
@@ -113,6 +120,8 @@ public class CheckOut extends AppCompatActivity {
         //productdetailsList= (List<OrderProductInput>) getIntent().getSerializableExtra("list");
         productdetailsList1=getIntent().getParcelableExtra("list");
 
+
+        pref = getSharedPreferences("user_details",MODE_PRIVATE);
 
 //        for(int i=0;i<new CartProductShow().chechkOutProductsList.size();i++){
 //            String pname=new CartProductShow().chechkOutProductsList.get(i).checkoutProductName;
@@ -173,9 +182,9 @@ public class CheckOut extends AppCompatActivity {
 
 
 
-            OrderProductInput orderProductInput=OrderProductInput.builder().product_id(pid).name(pname).price((price)).model("Hello").quantity(1).reward(r).tax(tax).build();
-            assert productdetailsList != null;
-            productdetailsList.add(orderProductInput);
+//            OrderProductInput orderProductInput=OrderProductInput.builder().product_id(pid).name(pname).price((price)).model("Hello").quantity(1).reward(r).tax(tax).build();
+//            assert productdetailsList != null;
+//            productdetailsList.add(orderProductInput);
 
         }
 
@@ -190,8 +199,40 @@ public class CheckOut extends AppCompatActivity {
 
 
 
+            handler22.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    //  if (emailtext!=null&&passtext!=null) {
+
+                    apolloClient.mutate(new UserloginMutation("shmozumder2@gmail.com", "0987654321")).enqueue(new ApolloCall.Callback<UserloginMutation.Data>() {
+                        @Override
+                        public void onResponse(@NotNull Response<UserloginMutation.Data> response) {
+//                            Toast.makeText(LoginActivity.this, "LoggedIn Successfully" + response.data(), Toast.LENGTH_SHORT).show();
+
+                            Log.d("LoginData", "onResponse: " + response.data().login().toString());
+                            if(response.data().login().toString()!=""){
+                                SharedPreferences.Editor editor = pref.edit();
+                                editor.putString("username","shmozumder2@gmail.com");
+                                editor.putString("password","0987654321");
+                                editor.commit();
+                            }
+
+                        }
+
+                        @Override
+                        public void onFailure(@NotNull ApolloException e) {
+                          //  Toast.makeText(LoginActivity.this, "Login Failed", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    //}
+                }
+            },2000);
+
+
+
+
         Totaaaal= Double.valueOf(String.valueOf(getIntent().getFloatExtra("total",0)));
-        Toast.makeText(this, "Total"+Totaaaal, Toast.LENGTH_SHORT).show();
+       // Toast.makeText(this, "Total"+Totaaaal, Toast.LENGTH_SHORT).show();
 
         String name = "Shariar";
     String address="feni";
@@ -217,7 +258,7 @@ public class CheckOut extends AppCompatActivity {
 
 
             CartItemInput cartItemInput= CartItemInput.builder().product_id("2046")
-                    .quantity(1).options(oplist).recurring_id("").build();
+                    .quantity(2).options(oplist).recurring_id("").build();
 
 
 
@@ -226,6 +267,23 @@ public class CheckOut extends AppCompatActivity {
                 public void onResponse(@NotNull Response<AddToCartItemsMutation.Data> response) {
                     assert response.data() != null;
                     Log.d("cartQuerydekhi_Mutation", "Total: "+response.data().addItemToCart().total());
+
+                    new Thread()
+                    {
+                        public void run()
+                        {
+                            CheckOut.this.runOnUiThread(new Runnable()
+                            {
+                                public void run()
+                                {
+                                    //Do your UI operations like dialog opening or Toast here
+                                    Toast.makeText(CheckOut.this, "Total:"+response.data().addItemToCart().total(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                    }.start();
+
+
 
 //                    int size=response.data().addItemToCart().items().size();
 ////                    cid=new String[size];
@@ -274,101 +332,111 @@ public class CheckOut extends AppCompatActivity {
 //                        checkBoxagree.setError("Selection is Required!");
 //                    }
 //                    else{
-//                        handler.postDelayed(new Runnable() {
-//                            @Override
-//                            public void run() {
-//
-//
-//
-//
-//                                OrderInput orderInput = OrderInput.builder()
-//                                        .customer_id("123")
-//                                        .firstname(name)
-//                                        .lastname(name)
-//                                        .email(emailAdd)
-//                                        .telephone(phoneNumber)
-//                                        .fax(name)
-//                                        .payment_firstname(name)
-//                                        .payment_lastname(name)
-//                                        .payment_company(name)
-//                                        .payment_address_1("Feni")
-//                                        .payment_address_2("Dhaka")
-//                                        .payment_city("Dhaka")
-//                                        .payment_postcode("Dhaka")
-//                                        .payment_country("Dhaka")
-//                                        .payment_country_id("12")
-//                                        .payment_zone("Dhaka")
-//                                        .payment_zone_id("12")
-//                                        .payment_address_format("Dhaka")
-//                                        .payment_custom_field("Dhaka")
-//                                        .payment_method("Dhaka")
-//                                        .payment_code("Dhaka")
-//                                        .shipping_firstname("Dhaka")
-//                                        .shipping_lastname("Dhaka")
-//                                        .shipping_company("Dhaka")
-//                                        .shipping_address_1("Dhaka")
-//                                        .shipping_address_2("Dhaka")
-//                                        .shipping_city("Dhaka")
-//                                        .shipping_postcode("Dhaka")
-//                                        .shipping_country("Dhaka")
-//                                        .shipping_country_id("12")
-//                                        .shipping_zone("Dhaka")
-//                                        .shipping_zone_id("12")
-//                                        .shipping_address_format("Dhaka")
-//                                        .shipping_custom_field("Dhaka")
-//                                        .shipping_method("Dhaka")
-//                                        .shipping_code("Dhaka")
-//                                        .comment("Dhaka")
-//                                        .products(productdetailsList)
-//                                        .total(6.7)
-//                                        .build();
-//
-//
-//                                try {
-//                                    apolloClient.mutate(new AddorderMutation(orderInput)).enqueue(new ApolloCall.Callback<AddorderMutation.Data>() {
-//                                        @Override
-//                                        public void onResponse(@NotNull Response<AddorderMutation.Data> response) {
-//                                            // Toast.makeText(CheckOut.this, "Response"+response, Toast.LENGTH_SHORT).show();
-//                                            Log.d("IDBACK", "onResponse: " + response.data().addOrder());
-//                                        }
-//
-//                                        @Override
-//                                        public void onFailure(@NotNull ApolloException e) {
-//                                            Toast.makeText(CheckOut.this, "Failed" + e, Toast.LENGTH_SHORT).show();
-//                                            Log.d("failed", "onFailure: " + e);
-//                                        }
-//                                    });
-//                                } catch (NullPointerException e) {
-//                                    Log.d("Shit", "run: " + e);
-//                                }
-//                            }
-//                        },3000);
-//                        Intent intent = new Intent(CheckOut.this, MainActivity.class);
-//                        startActivity(intent);
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+
+//                                OrderProductOptionInput orderProductOptionInput=OrderProductOptionInput.builder().product_option_id("6772").product_option_value_id("12345").build();
+//                                OrderProductOptionInput orderProductOptionInput1=OrderProductOptionInput.builder().product_option_id("9148").product_option_value_id("16604").build();
+//                                List<OrderProductOptionInput> listOption=new ArrayList<>();
+//                                listOption.add(orderProductOptionInput);
+//                                listOption.add(orderProductOptionInput1);
+
+
+
+//                                OrderProductInput orderProductInput=OrderProductInput.builder().product_id("2046").name("ICC World Cup BD Team Jersey").model("ICC World Cup Jersey").option(listOption).build();
+//                                assert productdetailsList != null;
+//                                productdetailsList.add(orderProductInput);
+
+
+                                OrderInput orderInput = OrderInput.builder()
+                                        .customer_id("")
+                                        .firstname("Check")
+                                        .lastname("Mobile")
+                                        .email("shmozumder2@gmail.com")
+                                        .telephone("")
+                                        .fax("")
+                                        .payment_firstname("")
+                                        .payment_lastname("")
+                                        .payment_company("")
+                                        .payment_address_1("Feni")
+                                        .payment_address_2("Dhaka")
+                                        .payment_city("Dhaka")
+                                        .payment_postcode("")
+                                        .payment_country("")
+                                        .payment_country_id("")
+                                        .payment_zone("")
+                                        .payment_zone_id("")
+                                        .payment_address_format("")
+                                        .payment_custom_field("")
+                                        .payment_method("")
+                                        .payment_code("")
+                                        .shipping_firstname("Dhaka")
+                                        .shipping_lastname("Dhaka")
+                                        .shipping_company("Dhaka")
+                                        .shipping_address_1("Dhaka")
+                                        .shipping_address_2("Dhaka")
+                                        .shipping_city("Dhaka")
+                                        .shipping_postcode("")
+                                        .shipping_country("")
+                                        .shipping_country_id("")
+                                        .shipping_zone("")
+                                        .shipping_zone_id("")
+                                        .shipping_address_format("")
+                                        .shipping_custom_field("")
+                                        .shipping_method("")
+                                        .shipping_code("")
+                                        .comment("Dhaka")
+                                        .build();
+
+                               // OrderInput orderInput1=OrderInput.builder().email("shmozumder2@gmail.com").customer_id("49").build();
+
+
+                                try {
+                                    apolloClient.mutate(new AddorderMutation(orderInput)).enqueue(new ApolloCall.Callback<AddorderMutation.Data>() {
+                                        @Override
+                                        public void onResponse(@NotNull Response<AddorderMutation.Data> response) {
+                                            // Toast.makeText(CheckOut.this, "Response"+response, Toast.LENGTH_SHORT).show();
+                                            Log.d("IDBACK", "onResponse: " + response.data().addOrder());
+                                        }
+
+                                        @Override
+                                        public void onFailure(@NotNull ApolloException e) {
+                                            Toast.makeText(CheckOut.this, "Failed" + e, Toast.LENGTH_SHORT).show();
+                                            Log.d("failed", "onFailure: " + e);
+                                        }
+                                    });
+                                } catch (NullPointerException e) {
+                                    Log.d("Shit", "run: " + e);
+                                }
+                            }
+                        },3000);
+                        Intent intent = new Intent(CheckOut.this, CartProductShow.class);
+                        startActivity(intent);
 //                    }
 
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-
-
-
-
-                    apolloClient.query(new CartQuery()).enqueue(new ApolloCall.Callback<CartQuery.Data>() {
-                        @Override
-                        public void onResponse(@NotNull Response<CartQuery.Data> response) {
-                            Log.d("QueryofCarItems", "Query: "+response.data());
-
-                        }
-
-                        @Override
-                        public void onFailure(@NotNull ApolloException e) {
-                            Log.d("cartQuerydekhi", "onResponse: "+e);
-                        }
-                    });
-
-                        }
-                    },3000);
+//                    handler.postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+//
+//
+//
+//
+//                    apolloClient.query(new CartQuery()).enqueue(new ApolloCall.Callback<CartQuery.Data>() {
+//                        @Override
+//                        public void onResponse(@NotNull Response<CartQuery.Data> response) {
+//                            Log.d("QueryofCarItems", "Query: "+response.data());
+//
+//                        }
+//
+//                        @Override
+//                        public void onFailure(@NotNull ApolloException e) {
+//                            Log.d("cartQuerydekhi", "onResponse: "+e);
+//                        }
+//                    });
+//
+//                        }
+//                    },3000);
 
 
                 }

@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -41,6 +42,8 @@ public class LoginActivity extends AppCompatActivity {
 
     Handler handler22=new Handler();
 
+    SharedPreferences pref;
+
     ApolloClient apolloClient;
 
     @Override
@@ -60,6 +63,12 @@ public class LoginActivity extends AppCompatActivity {
 
         emailtext=email.getText().toString();
         passtext=pass.getText().toString();
+
+        pref = getSharedPreferences("user_details",MODE_PRIVATE);
+
+        if(pref.contains("username") && pref.contains("password")){
+            startActivity(new Intent(LoginActivity.this, CartProductShow.class));
+        }
 
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,14 +102,20 @@ public class LoginActivity extends AppCompatActivity {
         handler22.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (emailtext!=null&&passtext!=null) {
+              //  if (emailtext!=null&&passtext!=null) {
 
-                    apolloClient.mutate(new UserloginMutation(emailtext, passtext)).enqueue(new ApolloCall.Callback<UserloginMutation.Data>() {
+                    apolloClient.mutate(new UserloginMutation("shmozumder2@gmail.com", "0987654321")).enqueue(new ApolloCall.Callback<UserloginMutation.Data>() {
                         @Override
                         public void onResponse(@NotNull Response<UserloginMutation.Data> response) {
-                           // Toast.makeText(LoginActivity.this, "LoggedIn Successfully" + response.data(), Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(LoginActivity.this, "LoggedIn Successfully" + response.data(), Toast.LENGTH_SHORT).show();
 
-                         //   Log.d("LoginData", "onResponse: " + response.data().login().toString());
+                            Log.d("LoginData", "onResponse: " + response.data().login().toString());
+                            if(response.data().login().toString()!=""){
+                                SharedPreferences.Editor editor = pref.edit();
+                                editor.putString("username","shmozumder2@gmail.com");
+                                editor.putString("password","0987654321");
+                                editor.commit();
+                            }
                             Intent intent = new Intent(LoginActivity.this, CartProductShow.class);
                             startActivity(intent);
                         }
@@ -110,7 +125,7 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.makeText(LoginActivity.this, "Login Failed", Toast.LENGTH_SHORT).show();
                         }
                     });
-                }
+                //}
             }
         },2000);
 

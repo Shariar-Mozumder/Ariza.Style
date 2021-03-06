@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageButton;
@@ -83,6 +84,9 @@ public class MainActivity extends AppCompatActivity implements TopsellAdapter.On
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle toggle;
 
+    Boolean isScrolling=false;
+    int currentItems,totallistItems,scrollOutItems;
+
 
     Handler handler = new Handler();
     Handler handler1 = new Handler();
@@ -92,6 +96,8 @@ public class MainActivity extends AppCompatActivity implements TopsellAdapter.On
     Handler handler5 = new Handler();
     Handler handler6 = new Handler();
     Handler handler7 = new Handler();
+    Handler handler8 = new Handler();
+
 
     ProgressDialog progressDialog,intialProgress;
     int totallatestProductCount = 10;
@@ -373,6 +379,12 @@ public class MainActivity extends AppCompatActivity implements TopsellAdapter.On
         //catagoryquery();
        // hotlistInIt();
 
+//        handler8.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                loadLIST();
+//            }
+//        },3000);
        // loadLIST();
 
        // latestProductListShow();
@@ -381,6 +393,7 @@ public class MainActivity extends AppCompatActivity implements TopsellAdapter.On
         bannerInIT();
         latestProductqueryList();
         //latestProductqueryGrid();
+
 
 
 
@@ -867,17 +880,22 @@ public class MainActivity extends AppCompatActivity implements TopsellAdapter.On
                                 }
                                 //loadLIST();
                             }
+
+
                         });
 
                         handler4.postDelayed(new Runnable() {
                             @Override
                             public void run() {
+
                                 latestProductListShow();
 
 
 
                             }
-                        },3000);
+                        },500);
+
+
                     }
 
                     @Override
@@ -885,6 +903,8 @@ public class MainActivity extends AppCompatActivity implements TopsellAdapter.On
 
                     }
                 });
+
+
     }
 
 
@@ -1028,7 +1048,7 @@ public class MainActivity extends AppCompatActivity implements TopsellAdapter.On
                                 latestProductGridshow();
 
                             }
-                        },3000);
+                        },500);
                     }
 
                     @Override
@@ -1069,17 +1089,49 @@ public class MainActivity extends AppCompatActivity implements TopsellAdapter.On
            // LatestProductsModel latestProductsModel = new LatestProductsModel(HotImageFatches[i], HotNameFatches[i],HotPriceFatches[i],HotIDFatches[i],HotimagesFatches[i],HotmetadescriptionFatches[i],HotstockstatusFatches[i],HotquantityFatches[i],HotdescriptionFatches[i],HotweightFatches[i],HotlengthFatches[i],HotwidthFatches[i],HotheightFatches[i]);
             datalist1.add(latestProductsModel);
         }
-        LinearLayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
+        layoutManager = new LinearLayoutManager(MainActivity.this);
         recyclerView_latest_products.setLayoutManager(layoutManager);
-        recyclerView_latest_products.setItemAnimator(new DefaultItemAnimator());
+       // recyclerView_latest_products.setItemAnimator(null);
+      //   Objects.requireNonNull(recyclerView_latest_products.getItemAnimator()).setChangeDuration(1500);
+
+
 
         recyclerViewAdapter = new RecyclerViewAdapter(MainActivity.this, datalist1,this);
         recyclerView_latest_products.setAdapter(recyclerViewAdapter);
+        //addScrollerListenerLIST();
 
-
+//        recyclerView_latest_products.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+//                super.onScrollStateChanged(recyclerView, newState);
+//                if (newState== AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL){
+//                    isScrolling=true;
+//                }
+//            }
+//
+//            @Override
+//            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+//                super.onScrolled(recyclerView, dx, dy);
+//                currentItems=layoutManager.getChildCount();
+//                totallistItems=layoutManager.getItemCount();
+//                scrollOutItems=layoutManager.findFirstVisibleItemPosition();
+//
+//                if(isScrolling&&(currentItems+scrollOutItems==totallistItems)){
+//                    isScrolling=false;
+//                    fatchlatest();
+//                    Toast.makeText(MainActivity.this, "Done", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//        });
 
         //recyclerViewAdapter.notifyDataSetChanged();
     }
+
+    private void fatchlatest() {
+
+    }
+
+//
 
     private void latestProductGridshow() {
 
@@ -1100,7 +1152,9 @@ public class MainActivity extends AppCompatActivity implements TopsellAdapter.On
         //newme
         gridRecyclerViewAdapter = new GridRecyclerViewAdapter(MainActivity.this, datalist1,this::onNoteClicklatest);
         recyclerView_latest_products.setAdapter(gridRecyclerViewAdapter);
-      //  addScrollerListenerLIST();
+       // addScrollerListenerLIST();
+
+
     }
 
 
@@ -1212,7 +1266,7 @@ public class MainActivity extends AppCompatActivity implements TopsellAdapter.On
 //                    //It checks, fully visible view is the last one.
 //                    if (layoutManager.findLastCompletelyVisibleItemPosition() == datalist1.size() - 1) {
 //
-//                       // loadMoreLIST();
+//                        loadMoreLIST();
 //
 //                        isLoading = true;
 //                    }
@@ -1220,7 +1274,7 @@ public class MainActivity extends AppCompatActivity implements TopsellAdapter.On
 //            }
 //        });
 //    }
-
+//
 //    private void loadMoreLIST() {
 //
 //
@@ -1229,7 +1283,7 @@ public class MainActivity extends AppCompatActivity implements TopsellAdapter.On
 //            @Override
 //            public void run() {
 //
-//                LatestProductsModel latestProductsModel = new LatestProductsModel("Loading", "load","default","default","default",latestdefault,"default","default","default","default","default","default","default");
+//                LatestProductsModel latestProductsModel = new LatestProductsModel("Loading", "load","default","default","default",latestdefault,"default","default","default","default","default","default","default","default",latestdefault);
 //                datalist1.add(latestProductsModel);
 //                recyclerViewAdapter.notifyItemInserted(datalist1.size() - 1);
 //            }
@@ -1250,7 +1304,7 @@ public class MainActivity extends AppCompatActivity implements TopsellAdapter.On
 //                    //dataList.add("Item No "+ itemCount);
 //                    //newme
 //                    try {
-//                        LatestProductsModel latestProductsModel = new LatestProductsModel(latestimageFatches[itemCount], latestNameFatches[itemCount],latestPriceFatches[itemCount],latestDescriptionFatches[itemCount],latestIDFatches[itemCount],latestimagesFatches[itemCount],latestmetadescriptionFatches[itemCount],lateststockstatusFatches[itemCount],latestquantityFatches[itemCount],latestweightFatches[itemCount],latestlengthFatches[itemCount],latestwidthFatches[itemCount],latestheightFatches[itemCount]);
+//                        LatestProductsModel latestProductsModel = new LatestProductsModel(latestimageFatches[itemCount], latestNameFatches[itemCount],latestPriceFatches[itemCount],latestDescriptionFatches[itemCount],latestIDFatches[itemCount],latestimagesFatches[itemCount],latestmetadescriptionFatches[itemCount],lateststockstatusFatches[itemCount],latestquantityFatches[itemCount],latestweightFatches[itemCount],latestlengthFatches[itemCount],latestwidthFatches[itemCount],latestheightFatches[itemCount],latestmodelFatches[itemCount],latestsizeFatches[itemCount]);
 //                        datalist1.add(latestProductsModel);
 //                        totallatestProductCount++;
 //                    } catch (ArrayIndexOutOfBoundsException e) {
@@ -1270,16 +1324,19 @@ public class MainActivity extends AppCompatActivity implements TopsellAdapter.On
 //
 //
 //    }
-
-
+//
+//
 //    private void loadLIST() {
 //
 //        for (int i = 0; i < 10; i++) {
 //            //oldme
 //            // dataList.add("Item No: "+i);
 //            //newme
-//            LatestProductsModel latestProductsModel = new LatestProductsModel(latestimageFatches[i], latestNameFatches[i],latestPriceFatches[i],latestDescriptionFatches[i],latestIDFatches[i],latestimagesFatches[i],latestmetadescriptionFatches[i],lateststockstatusFatches[i],latestquantityFatches[i],latestweightFatches[i],latestlengthFatches[i],latestwidthFatches[i],latestheightFatches[i]);
+//
+//            LatestProductsModel latestProductsModel = new LatestProductsModel(latestimageFatches[i], latestNameFatches[i],latestPriceFatches[i],latestDescriptionFatches[i],latestIDFatches[i],latestimagesFatches[i],latestmetadescriptionFatches[i],lateststockstatusFatches[i],latestquantityFatches[i],latestweightFatches[i],latestlengthFatches[i],latestwidthFatches[i],latestheightFatches[i],latestmodelFatches[i],latestsizeFatches[i]);
 //            datalist1.add(latestProductsModel);
+//
+//
 //        }
 //
 //    }

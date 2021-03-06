@@ -56,9 +56,21 @@
             android:layout_alignParentTop="true"
             android:id="@+id/imageSlider"/>
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/rl31"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_below="@+id/imageSlider">
+
+
+
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Catagories"
             android:textSize="20dp"
@@ -67,7 +79,23 @@
             android:id="@+id/catagorytext"
             android:layout_marginTop="5dp"
             android:layout_marginStart="10dp"
-            android:layout_below="@+id/imageSlider"/>
+            />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="See All >>"
+                android:textSize="15dp"
+                android:textColor="#111111"
+                android:textStyle="bold"
+                android:id="@+id/catagorytextseeAll"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="10dp"
+                />
+
+
+        </RelativeLayout>
 
 
 
@@ -82,7 +110,7 @@
             android:horizontalSpacing="5dp"
             android:verticalSpacing="5dp"
             android:listSelector="#666464"
-            android:layout_below="@+id/catagorytext"
+            android:layout_below="@+id/rl31"
             android:numColumns="3"
             android:gravity="center"/>
 
@@ -103,8 +131,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginLeft="8dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
             android:layout_below="@+id/topselltext"
             android:id="@+id/top_sell_recyclerView"/>
 
@@ -124,8 +152,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginLeft="8dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
             android:layout_below="@+id/dealstext"
             android:id="@+id/banner_recyclerView"/>
 
@@ -146,8 +174,8 @@
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="5dp"
-            android:layout_marginLeft="5dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
             android:id="@+id/hot_sell_recyclerView"
             android:layout_below="@+id/hotselltext"/>
 
@@ -209,6 +237,8 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
                 android:id="@+id/latest_products_recyclerView"
                 />
 
